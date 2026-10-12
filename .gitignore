@@ -1,0 +1,47 @@
+# Local Python environments
+venv/
+.venv/
+env/
+.env/
+
+# Secrets and local configuration
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Python caches, test output, and local databases
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.pytest-temp/
+.pytest-*/
+**/pytest-cache-files*/
+**/pytest-tmp/
+*.db
+*.sqlite
+*.sqlite3
+
+# JavaScript dependencies and build output
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Benchmark and browser test output
+test-results/
+playwright-report/
+**/.codex/
+
+# Editors and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Archives and local bundles
+main.zip
+*.zip
+
+/main/backend/benchmarks/assets/kokoro-v1.0.onnx

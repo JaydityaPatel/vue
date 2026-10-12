@@ -1,0 +1,52 @@
+# Fill these in from your AI Studio / Google Cloud rate-limit dashboard.
+# Values below are PLACEHOLDERS — do not rely on them being correct.
+# rpm = requests per minute, tpm = tokens per minute, rpd = requests per day
+
+models:
+  gemini-3.8-flash:
+    rpm: 10
+    tpm: 250000
+    rpd: 250
+  gemini-2.5-flash:
+    rpm: 15
+    tpm: 1000000
+    rpd: 1500
+  gemini-3.1-pro-preview:
+    rpm: 5
+    tpm: 250000
+    rpd: 100
+  gemini-2.5-pro:
+    rpm: 5
+    tpm: 250000
+    rpd: 100
+  gemini-3.5-flash-lite:
+    rpm: 15
+    tpm: 1000000
+    rpd: 1500
+  gemini-2.5-flash-lite:
+    rpm: 15
+    tpm: 1000000
+    rpd: 1500
+
+# Task -> ordered fallback chain of model ids (first is primary).
+routes:
+  next_turn:
+    - gemini-3.8-flash
+    - gemini-2.5-flash
+    - ollama:qwen2.5-3b
+  score_answer:
+    - gemini-3.8-flash
+    - gemini-2.5-flash
+    - ollama:qwen2.5-3b
+  build_question_bank:
+    - gemini-3.1-pro-preview
+    - gemini-2.5-pro
+  final_evaluation:
+    - gemini-3.1-pro-preview
+    - gemini-2.5-pro
+  summarize:
+    - gemini-3.5-flash-lite
+    - gemini-2.5-flash-lite
+  intro_chat:
+    - ollama:qwen2.5-3b
+    - gemini-3.5-flash-lite

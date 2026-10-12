@@ -1,0 +1,35 @@
+{
+  "stage": "local_vad",
+  "model": "Silero VAD",
+  "measurements": [
+    {
+      "audio": "kokoro_synthetic.wav",
+      "segments": [
+        [
+          0.098,
+          3.006
+        ],
+        [
+          3.586,
+          5.694
+        ],
+        [
+          5.858,
+          7.006625
+        ]
+      ],
+      "latency_seconds": 0.03265169996302575
+    }
+  ],
+  "hardware": {
+    "python": "3.12.14",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "cpu_logical_cores": 32,
+    "gpu": {
+      "name": "NVIDIA RTX 4000 Ada Generation",
+      "memory_used_mib": 1344,
+      "memory_total_mib": 20475,
+      "utilization_percent": 0
+    }
+  }
+}

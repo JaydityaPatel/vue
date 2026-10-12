@@ -1,0 +1,20 @@
+.text-interview-grid { align-items: start; }
+.text-interview-panel { padding: 28px; border-radius: 20px; min-width: 0; }
+.text-interview-panel h2 { font-size: 22px; line-height: 1.45; }
+.text-interview-panel .eyebrow { margin-bottom: 12px; }
+.text-interview-panel textarea { resize: vertical; min-height: 180px; font-size: 14px; line-height: 1.6; }
+.text-interview-panel .button { margin-top: 16px; margin-right: 8px; }
+.interview-error { color: #ffbbc6; padding: 12px 16px; border: 1px solid #613240; border-radius: 10px; }
+.text-transcript { max-height: 72vh; overflow-y: auto; }
+.interview-history { list-style: none; padding: 0; margin: 0; }
+.interview-history li { padding: 18px 0; border-top: 1px solid var(--line); }
+.interview-history h3, .interview-history h4 { margin: 0 0 8px; font-size: 12px; color: #c8bef0; }
+.interview-history h4 { margin-top: 16px; }
+.interview-history p { margin-bottom: 8px; font-size: 13px; overflow-wrap: anywhere; }
+.candidate-answer { white-space: pre-wrap; color: #bbb7c8; }
+.text-interview-panel button:disabled, .setup-card button:disabled { opacity: .6; cursor: wait; transform: none; }
+@media (max-width: 600px) {
+  .text-interview-panel { padding: 18px; }
+  .text-interview-panel h2 { font-size: 19px; }
+  .text-transcript { max-height: none; }
+}

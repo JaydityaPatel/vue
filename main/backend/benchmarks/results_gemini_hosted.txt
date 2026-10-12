@@ -1,0 +1,18 @@
+PHASE 3 GEMINI-HOSTED PIPELINE BENCHMARK
+Status: unavailable: GEMINI_API_KEY is not configured
+Hardware: {'python': '3.12.14', 'platform': 'Windows-11-10.0.26200-SP0', 'cpu_logical_cores': 32, 'gpu': {'name': 'NVIDIA RTX 4000 Ada Generation', 'memory_used_mib': 1498, 'memory_total_mib': 20475, 'utilization_percent': 2}}
+Trials requested: 5; trials completed: 0
+Timings exclude model initialization/warmup; values are seconds. TTS is time to first Kokoro stream chunk.
+
+Stage                                  min       max      mean    median
+-------------------------------------------------------------------------
+stt_seconds                      unavailable
+llm_ttft_seconds                 unavailable
+llm_total_seconds                unavailable
+tts_first_audio_seconds          unavailable
+end_to_end_seconds               unavailable
+
+Individual trials:
+No measurements: unavailable: GEMINI_API_KEY is not configured
+
+GPU before all runs={'name': 'NVIDIA RTX 4000 Ada Generation', 'memory_used_mib': 1380, 'memory_total_mib': 20475, 'utilization_percent': 4}; after local={'name': 'NVIDIA RTX 4000 Ada Generation', 'memory_used_mib': 1498, 'memory_total_mib': 20475, 'utilization_percent': 2}; after hosted={'name': 'NVIDIA RTX 4000 Ada Generation', 'memory_used_mib': 1498, 'memory_total_mib': 20475, 'utilization_percent': 2}

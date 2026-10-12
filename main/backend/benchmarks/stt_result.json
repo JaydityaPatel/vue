@@ -1,0 +1,29 @@
+{
+  "stage": "local_stt",
+  "model": "faster-whisper small.en",
+  "runtime": {
+    "device": "cpu",
+    "compute_type": "int8",
+    "cuda_error": "Library cublas64_12.dll is not found or cannot be loaded"
+  },
+  "warmup_seconds": 1.065603099996224,
+  "warmup_transcript": "I would begin by understanding the customer's needs. Then I would agree on a plan with the team and measure the result.",
+  "measurements": [
+    {
+      "audio": "kokoro_synthetic.wav",
+      "transcript": "I would begin by understanding the customer's needs. Then I would agree on a plan with the team and measure the result.",
+      "latency_seconds": 1.0695897999685258
+    }
+  ],
+  "hardware": {
+    "python": "3.12.14",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "cpu_logical_cores": 32,
+    "gpu": {
+      "name": "NVIDIA RTX 4000 Ada Generation",
+      "memory_used_mib": 1494,
+      "memory_total_mib": 20475,
+      "utilization_percent": 0
+    }
+  }
+}

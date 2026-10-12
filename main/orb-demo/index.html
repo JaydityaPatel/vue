@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#020207" />
+    <title>Orb — audio experiment</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main>
+      <header><span class="mark" aria-hidden="true"></span> DEMO <span class="dash">—</span> AUDIO REACTIVE ORB</header>
+      <section class="stage" aria-label="Interactive neon orb">
+        <canvas id="orb" aria-label="Animated neon ring surrounding a flowing three-dimensional particle field"></canvas>
+      </section>
+      <footer>
+        <div class="controls">
+        <button id="audio" type="button" aria-pressed="false">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8"/></svg>
+          <span>Start Audio</span>
+        </button>
+        <button id="simulate" type="button" aria-pressed="false">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 10v4M8 6v12M12 3v18M16 6v12M20 10v4"/></svg>
+          <span>Simulate Audio</span>
+        </button>
+        </div>
+        <p id="status" role="status" aria-live="polite"><i></i><span>Idle · microphone off</span></p>
+        <p class="privacy">Sound becomes motion. Audio stays on your device.</p>
+      </footer>
+    </main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

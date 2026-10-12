@@ -1,0 +1,21 @@
+:root { color-scheme: dark; font-family: Inter, "Segoe UI", sans-serif; background: #000; color: #e5e2f1; }
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 280px; }
+main { min-height: 100svh; display: flex; align-items: center; flex-direction: column; overflow: hidden; }
+header { padding: 35px 20px 0; display: flex; align-items: center; gap: 10px; font-size: 10px; letter-spacing: 2.5px; font-weight: 500; color: #a5a0b9; white-space: nowrap; z-index: 1; }
+.mark { width: 5px; height: 5px; border-radius: 50%; background: #cdb4ff; box-shadow: 0 0 12px #8255df; margin-right: 3px; }
+.dash { color: #535061; }
+.stage { width: min(780px, 100vw, 79svh); aspect-ratio: 1; position: relative; margin: auto 0; }
+canvas { width: 100%; height: 100%; display: block; touch-action: pan-y; }
+footer { text-align: center; padding: 0 20px 30px; z-index: 1; }
+.controls { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-width: 142px; height: 44px; border: 1px solid #393047; border-radius: 24px; background: #111018; color: #e6deef; font: inherit; font-size: 12px; letter-spacing: .3px; cursor: pointer; transition: border-color .25s, background .25s, box-shadow .25s; }
+button:hover { background: #1b1426; border-color: #8f64bc; box-shadow: 0 0 22px #8734c21a; }
+button:focus-visible { outline: 2px solid #c8a2ff; outline-offset: 5px; }
+button:disabled { opacity: .6; cursor: wait; }
+button[aria-pressed="true"] { border-color: #8055a8; background: #20132d; }
+#status { display: flex; align-items: center; justify-content: center; gap: 7px; color: #878094; font-size: 11px; margin: 16px 0 0; line-height: 1.6; max-width: 430px; }
+#status i { flex-shrink: 0; width: 4px; height: 4px; border-radius: 50%; background: #676070; }
+#status.active i { background: #b89cff; box-shadow: 0 0 8px #b89cff; }
+.privacy { color: #514c5e; font-size: 10px; letter-spacing: .25px; margin-top: 9px; }
+@media (max-width: 480px) { header { font-size: 8px; letter-spacing: 1.6px; padding-top: 27px; } footer { padding-bottom: 25px; } }
