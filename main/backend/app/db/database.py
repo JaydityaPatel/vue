@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 
 from app.config import settings
@@ -26,3 +26,11 @@ def init_db():
     from app.db import models  # noqa: F401
 
     Base.metadata.create_all(bind=engine)
+    # Add cached-token accounting to existing SQLite databases. create_all only
+    # creates missing tables and does not alter tables already in use.
+    inspector = inspect(engine)
+    if "llm_call_logs" in inspector.get_table_names() and "cached_input_tokens" not in {
+        column["name"] for column in inspector.get_columns("llm_call_logs")
+    }:
+        with engine.begin() as connection:
+            connection.execute(text("ALTER TABLE llm_call_logs ADD COLUMN cached_input_tokens INTEGER"))

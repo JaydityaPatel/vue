@@ -1,12 +1,14 @@
-# Fill these in from your AI Studio / Google Cloud rate-limit dashboard.
-# Values below are PLACEHOLDERS — do not rely on them being correct.
+# Phase 1-8 E2E observations (2026-10-14): Flash Lite had 41 successes, no
+# logged 429s, and a peak of 10 calls/minute; Gemini 3.8 had 6 successes and
+# 40 rate-limited attempts. Caps below are local guardrails, not Google quotas.
+# Other model limits are unverified defaults; confirm account quotas in the dashboard.
 # rpm = requests per minute, tpm = tokens per minute, rpd = requests per day
 
 models:
   gemini-3.8-flash:
-    rpm: 10
+    rpm: 2
     tpm: 250000
-    rpd: 250
+    rpd: 10
   gemini-2.5-flash:
     rpm: 15
     tpm: 1000000
@@ -20,9 +22,9 @@ models:
     tpm: 250000
     rpd: 100
   gemini-3.5-flash-lite:
-    rpm: 15
+    rpm: 10
     tpm: 1000000
-    rpd: 1500
+    rpd: 50
   gemini-2.5-flash-lite:
     rpm: 15
     tpm: 1000000
@@ -31,22 +33,25 @@ models:
 # Task -> ordered fallback chain of model ids (first is primary).
 routes:
   next_turn:
+    - gemini-3.5-flash-lite
     - gemini-3.8-flash
-    - gemini-2.5-flash
-    - ollama:qwen2.5-3b
+    - ollama:qwen2.5:3b
   score_answer:
+    - gemini-3.5-flash-lite
     - gemini-3.8-flash
-    - gemini-2.5-flash
-    - ollama:qwen2.5-3b
+    - ollama:qwen2.5:3b
   build_question_bank:
-    - gemini-3.1-pro-preview
-    - gemini-2.5-pro
+    - gemini-3.8-flash
+    - gemini-3.5-flash-lite
+  job_web_research:
+    - gemini-3.8-flash
+    - gemini-3.5-flash-lite
   final_evaluation:
-    - gemini-3.1-pro-preview
-    - gemini-2.5-pro
+    - gemini-3.8-flash
+    - gemini-3.5-flash-lite
   summarize:
     - gemini-3.5-flash-lite
-    - gemini-2.5-flash-lite
+    - gemini-3.8-flash
   intro_chat:
-    - ollama:qwen2.5-3b
+    - ollama:qwen2.5:3b
     - gemini-3.5-flash-lite

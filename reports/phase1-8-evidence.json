@@ -1,0 +1,2103 @@
+{
+    "started_at":  "2026-10-14T09:04:40.073694+00:00",
+    "api_base":  "http://127.0.0.1:8002",
+    "fixture_resume":  "main\\scripts\\e2e-fixtures\\sample-resume.pdf",
+    "fixture_job_description":  "main\\scripts\\e2e-fixtures\\sample-job-description.md",
+    "timings":  [
+                    {
+                        "stage":  "signup",
+                        "status_code":  201,
+                        "elapsed_ms":  166.7
+                    }
+                ],
+    "modes":  {
+                  "random":  {
+                                 "session_id":  "c1b4be07-87ee-4cfd-a7c6-1cb09c315c5e",
+                                 "setup_elapsed_ms":  19350.2,
+                                 "first_question":  "To kick off our discussion on Python concurrency, could you explain how the Global Interpreter Lock (GIL) impacts multithreading in Python, and how an asynchronous approach using asyncio and the event loop differs when handling concurrent I/O-bound tasks?",
+                                 "intro_round_present":  false,
+                                 "turns":  [
+                                               {
+                                                   "turn_index":  0,
+                                                   "question":  "To kick off our discussion on Python concurrency, could you explain how the Global Interpreter Lock (GIL) impacts multithreading in Python, and how an asynchronous approach using asyncio and the event loop differs when handling concurrent I/O-bound tasks?",
+                                                   "answer":  "In standard CPython the GIL allows only one thread to execute Python bytecode at a time. For I/O-bound work I use asyncio for many cooperative operations, or threads around blocking I/O; for CPU-bound parallel work I use multiprocessing or a native library that releases the GIL. I would benchmark and account for coordination and serialization overhead.",
+                                                   "action_taken":  null,
+                                                   "topic":  "Python Fundamentals and Asynchronous Programming",
+                                                   "generated_by_model":  "gemini-3.8-flash",
+                                                   "provisional":  false,
+                                                   "decision":  {
+                                                                    "requested_action":  "follow_up",
+                                                                    "executed_action":  "follow_up",
+                                                                    "rationale":  "The candidate provided an accurate high-level summary of the GIL and concurrency models, but did not delve into the mechanics of asyncio. Following up on how coroutines and the event loop function under the hood will evaluate their concrete understanding of Python\u0027s cooperative concurrency model.",
+                                                                    "model_used":  "gemini-3.8-flash",
+                                                                    "provisional":  false
+                                                                },
+                                                   "score":  {
+                                                                 "technical_correctness":  4.0,
+                                                                 "completeness":  3.0,
+                                                                 "communication":  4.0,
+                                                                 "problem_solving":  3.0
+                                                             },
+                                                   "missing_concepts":  [
+                                                                            "Event Loop",
+                                                                            "Coroutines",
+                                                                            "Concurrency vs Parallelism"
+                                                                        ],
+                                                   "feedback":  "You accurately defined the GIL in CPython and appropriately identified when to use asyncio, threading, or multiprocessing. However, your answer was quite brief and did not explicitly explain how the event loop operates, what coroutines are, or the fundamental difference between cooperative concurrency in a single thread versus OS-level thread scheduling.",
+                                                   "scored_by_model":  "gemini-3.8-flash",
+                                                   "score_provisional":  false
+                                               },
+                                               {
+                                                   "turn_index":  1,
+                                                   "question":  "Could you drill down into how asyncio operates under the hood? Specifically, how do coroutines and the event loop coordinate when an `await` expression is reached during an I/O operation?",
+                                                   "answer":  "I try to write clean code, communicate well, and ask for help when needed. I do not have a specific example right now.",
+                                                   "action_taken":  "follow_up",
+                                                   "topic":  "Python Fundamentals and Asynchronous Programming",
+                                                   "generated_by_model":  "gemini-3.8-flash",
+                                                   "provisional":  false,
+                                                   "decision":  {
+                                                                    "requested_action":  "challenge",
+                                                                    "executed_action":  "challenge",
+                                                                    "rationale":  "The candidate failed to answer the previous technical question about asyncio internals and gave a generic response. Since they are a junior backend engineer, I should pivot slightly or challenge them with a more foundational conceptual question regarding the difference between concurrency and parallelism to ensure we assess their understanding.",
+                                                                    "model_used":  "gemini-3.5-flash-lite",
+                                                                    "provisional":  true
+                                                                },
+                                                   "score":  {
+                                                                 "technical_correctness":  1.0,
+                                                                 "completeness":  1.0,
+                                                                 "communication":  1.0,
+                                                                 "problem_solving":  1.0
+                                                             },
+                                                   "missing_concepts":  [
+                                                                            "Global Interpreter Lock",
+                                                                            "Event Loop",
+                                                                            "Coroutines",
+                                                                            "Concurrency vs Parallelism"
+                                                                        ],
+                                                   "feedback":  "The response did not address the question about how asyncio, coroutines, and the event loop function under the hood during I/O operations.",
+                                                   "scored_by_model":  "gemini-3.8-flash",
+                                                   "score_provisional":  false
+                                               },
+                                               {
+                                                   "turn_index":  2,
+                                                   "question":  "Let\u0027s step back for a moment. Can you explain the practical difference between concurrency and parallelism, and give a simple real-world or coding example of when you would apply each?",
+                                                   "answer":  "I think teamwork and communication are important for every project. Could we move to another question?",
+                                                   "action_taken":  "challenge",
+                                                   "topic":  "Python Fundamentals and Asynchronous Programming",
+                                                   "generated_by_model":  "gemini-3.5-flash-lite",
+                                                   "provisional":  true,
+                                                   "decision":  {
+                                                                    "requested_action":  "switch_topic",
+                                                                    "executed_action":  "switch_topic",
+                                                                    "rationale":  "The candidate has repeatedly avoided answering technical questions on Python fundamentals and asynchronous programming, providing non-technical responses and asking to move on. It is best to switch to another topic in the interview plan, such as PostgreSQL, to gauge their knowledge in a different area.",
+                                                                    "model_used":  "gemini-3.5-flash-lite",
+                                                                    "provisional":  true
+                                                                },
+                                                   "score":  {
+                                                                 "technical_correctness":  1.0,
+                                                                 "completeness":  1.0,
+                                                                 "communication":  2.0,
+                                                                 "problem_solving":  1.0
+                                                             },
+                                                   "missing_concepts":  [
+                                                                            "Global Interpreter Lock",
+                                                                            "Event Loop",
+                                                                            "Coroutines",
+                                                                            "Concurrency vs Parallelism"
+                                                                        ],
+                                                   "feedback":  "The candidate avoided the question entirely and provided an unrelated response about teamwork, failing to address concurrency, parallelism, or any associated technical concepts.",
+                                                   "scored_by_model":  "gemini-3.5-flash-lite",
+                                                   "score_provisional":  true
+                                               },
+                                               {
+                                                   "turn_index":  3,
+                                                   "question":  "How would you design a relational schema in PostgreSQL for a high-traffic transactional system, and what factors do you consider when choosing between different indexing strategies like B-tree and GIN?",
+                                                   "answer":  "I used PostgreSQL query plans and indexes to reduce a reporting API\u0027s p95 latency by 42%. I checked representative plans and write cost, then tested concurrent updates and rollback behavior before releasing the schema change.",
+                                                   "action_taken":  "switch_topic",
+                                                   "topic":  "PostgreSQL Data Modeling and Query Optimization",
+                                                   "generated_by_model":  "gemini-3.5-flash-lite",
+                                                   "provisional":  true,
+                                                   "decision":  {
+                                                                    "requested_action":  "follow_up",
+                                                                    "executed_action":  "follow_up",
+                                                                    "rationale":  "The candidate mentioned query plans and indexes, but completely missed core schema design concepts like normalization, foreign keys, and ACID properties for a transactional system. A follow-up is necessary to address those missing expected concepts before moving on.",
+                                                                    "model_used":  "gemini-3.5-flash-lite",
+                                                                    "provisional":  true
+                                                                },
+                                                   "score":  {
+                                                                 "technical_correctness":  3.0,
+                                                                 "completeness":  2.0,
+                                                                 "communication":  3.0,
+                                                                 "problem_solving":  3.0
+                                                             },
+                                                   "missing_concepts":  [
+                                                                            "Normalization",
+                                                                            "Foreign Keys",
+                                                                            "ACID properties"
+                                                                        ],
+                                                   "feedback":  "The candidate mentions query plans and indexing strategies, but completely misses schema design concepts such as normalization, foreign keys, and ACID properties for a transactional system.",
+                                                   "scored_by_model":  "gemini-3.5-flash-lite",
+                                                   "score_provisional":  true
+                                               },
+                                               {
+                                                   "turn_index":  4,
+                                                   "question":  "Building on your experience with query plans and indexes, could you walk through how you ensure data integrity and handle normalization versus denormalization when designing the actual tables and foreign key constraints for this high-traffic transactional system?",
+                                                   "answer":  "I use a multi-stage build, pin dependencies, order stable layers for cache reuse, and exclude local files with .dockerignore. I run as a non-root user, keep secrets out of the image, and use volumes only for data that needs persistence. I check image size and startup behavior in CI.",
+                                                   "action_taken":  "follow_up",
+                                                   "topic":  "PostgreSQL Data Modeling and Query Optimization",
+                                                   "generated_by_model":  "gemini-3.5-flash-lite",
+                                                   "provisional":  true,
+                                                   "decision":  {
+                                                                    "requested_action":  "move_on",
+                                                                    "executed_action":  "move_on",
+                                                                    "rationale":  "The candidate\u0027s responses on PostgreSQL and concurrency have been increasingly irrelevant or evasive, drifting into Docker practices when asked about database normalization. Given the difficulty and interview type, it is best to transition to the Docker topic plan.",
+                                                                    "model_used":  "gemini-3.5-flash-lite",
+                                                                    "provisional":  true
+                                                                },
+                                                   "score":  {
+                                                                 "technical_correctness":  1.0,
+                                                                 "completeness":  1.0,
+                                                                 "communication":  2.0,
+                                                                 "problem_solving":  1.0
+                                                             },
+                                                   "missing_concepts":  [
+                                                                            "Normalization",
+                                                                            "Foreign Keys",
+                                                                            "Query Execution Plans",
+                                                                            "Indexing Strategies",
+                                                                            "ACID properties"
+                                                                        ],
+                                                   "feedback":  "The candidate provided an answer entirely about Docker and containerization best practices, which is completely irrelevant to the database design, normalization, foreign keys, and query planning question asked.",
+                                                   "scored_by_model":  "gemini-3.5-flash-lite",
+                                                   "score_provisional":  true
+                                               },
+                                               {
+                                                   "turn_index":  5,
+                                                   "question":  "Moving on to Docker and containerization, when building Docker images for Python applications, what best practices do you follow to keep images secure and lightweight? In particular, how do you approach base image selection, managing image layers, and utilizing multi-stage builds?",
+                                                   "answer":  "I use a multi-stage build, pin dependencies, order stable layers for cache reuse, and exclude local files with .dockerignore. I run as a non-root user, keep secrets out of the image, and use volumes only for data that needs persistence. I check image size and startup behavior in CI.",
+                                                   "action_taken":  "move_on",
+                                                   "topic":  "Containerization and Docker Workflow",
+                                                   "generated_by_model":  "gemini-3.8-flash",
+                                                   "provisional":  false,
+                                                   "decision":  {
+                                                                    "requested_action":  "follow_up",
+                                                                    "executed_action":  "follow_up",
+                                                                    "rationale":  "The candidate provided a strong overview of Docker best practices but missed discussing base image selection and network security. I will follow up to probe deeper into those specific missing concepts.",
+                                                                    "model_used":  "gemini-3.5-flash-lite",
+                                                                    "provisional":  true
+                                                                },
+                                                   "score":  {
+                                                                 "technical_correctness":  4.0,
+                                                                 "completeness":  3.0,
+                                                                 "communication":  4.0,
+                                                                 "problem_solving":  3.0
+                                                             },
+                                                   "missing_concepts":  [
+                                                                            "Network security",
+                                                                            "Base images"
+                                                                        ],
+                                                   "feedback":  "You identified several core containerization best practices, such as multi-stage builds, layer caching, non-root user execution, and .dockerignore usage. However, you omitted base image selection (such as evaluating slim, alpine, or distroless images for Python) which was explicitly prompted, as well as network security practices.",
+                                                   "scored_by_model":  "gemini-3.8-flash",
+                                                   "score_provisional":  false
+                                               },
+                                               {
+                                                   "turn_index":  6,
+                                                   "question":  "You mentioned several great practices like multi-stage builds and non-root users. Could you expand on how you select appropriate base images for Python applications—such as comparing alpine, slim, or distroless—and how you handle network security and isolation between containers?",
+                                                   "answer":  null,
+                                                   "action_taken":  "follow_up",
+                                                   "topic":  "Containerization and Docker Workflow",
+                                                   "generated_by_model":  "gemini-3.5-flash-lite",
+                                                   "provisional":  true,
+                                                   "decision":  null
+                                               }
+                                           ],
+                                 "answer_timings_ms":  [
+                                                           23321.4,
+                                                           7965.0,
+                                                           4736.3,
+                                                           3255.8,
+                                                           9047.0,
+                                                           9123.8
+                                                       ],
+                                 "end_websocket":  {
+                                                       "attempted":  true,
+                                                       "events":  [
+                                                                      "snapshot",
+                                                                      "state",
+                                                                      "state",
+                                                                      "question_start",
+                                                                      "question_chunk",
+                                                                      "question_chunk",
+                                                                      "question_chunk",
+                                                                      "question_chunk",
+                                                                      "question_end",
+                                                                      "snapshot"
+                                                                  ],
+                                                       "final_status":  "completed"
+                                                   },
+                                 "status":  "completed",
+                                 "report":  {
+                                                "summary":  "The candidate demonstrated an understanding of the Python GIL and basic multiprocessing concepts, as well as practical experience with PostgreSQL query optimization and Docker multi-stage builds. However, the interview revealed significant gaps in explaining lower-level mechanics such as the asyncio event loop and coroutines, defining concurrency versus parallelism, and detailing database schema design concepts like normalization and foreign keys. The candidate also occasionally provided evasive or completely off-topic responses during technical follow-ups.",
+                                                "improvement_suggestions":  [
+                                                                                "Study the internal mechanics of Python\u0027s asyncio, including how the event loop coordinates execution and how `await` expressions interact with coroutines.",
+                                                                                "Clearly distinguish between concurrency and parallelism with concrete coding examples.",
+                                                                                "Review foundational relational database concepts, including normalization levels, foreign key constraints, and ACID properties alongside query optimization.",
+                                                                                "Deepen knowledge of Docker base image selection tradeoffs (such as alpine versus slim or distroless images) and container network security.",
+                                                                                "Practice providing direct, detailed technical answers rather than avoiding questions or providing responses about entirely different topics."
+                                                                            ],
+                                                "id":  "acf7a141-b4c2-485b-9512-c7fdedad4936",
+                                                "session_id":  "c1b4be07-87ee-4cfd-a7c6-1cb09c315c5e",
+                                                "overall_score":  2.21,
+                                                "generated_by_model":  "gemini-3.5-flash-lite",
+                                                "provisional":  true
+                                            }
+                             },
+                  "resume":  {
+                                 "session_id":  "90ff0713-c961-40af-945f-0d84166fc472",
+                                 "initial_question":  "Tell me about yourself.",
+                                 "preparation_elapsed_ms":  4024.8,
+                                 "create_and_prepare_elapsed_ms":  4053.0,
+                                 "preparation_status":  "ready",
+                                 "plan_topics":  [
+                                                     {
+                                                         "name":  "Kafka Real-Time Event Pipeline at Meridian Analytics",
+                                                         "question_seeds":  [
+                                                                                "Can you walk through how you designed the Kafka event pipeline at Meridian Analytics to handle 10,000 events per second?",
+                                                                                "How did you implement idempotent consumers and bounded retries to handle duplicate and delayed events while maintaining the p95 latency below 200 ms?"
+                                                                            ],
+                                                         "expected_concepts":  [
+                                                                                   "Kafka partition strategy and throughput management",
+                                                                                   "Idempotency implementation mechanisms in consumers",
+                                                                                   "Bounded retry patterns and dead-letter queues",
+                                                                                   "Latency profiling and p95 optimization"
+                                                                               ],
+                                                         "skill_tag_id":  "972e39da-f59c-4bc1-9bd5-7a572deee94b",
+                                                         "source":  "resume_jd",
+                                                         "source_tags":  [
+                                                                             "resume_jd"
+                                                                         ],
+                                                         "question_seed_sources":  [
+                                                                                       "resume_jd",
+                                                                                       "resume_jd"
+                                                                                   ],
+                                                         "expected_concept_sources":  [
+                                                                                          "resume_jd",
+                                                                                          "resume_jd",
+                                                                                          "resume_jd",
+                                                                                          "resume_jd"
+                                                                                      ]
+                                                     },
+                                                     {
+                                                         "name":  "PostgreSQL Performance Tuning and Indexing",
+                                                         "question_seeds":  [
+                                                                                "What specific changes did you make to the PostgreSQL indexes and query plans for the reporting API that resulted in a 42% reduction in p95 latency?",
+                                                                                "How did you ensure correctness and handle concurrent updates while optimizing these heavy reporting queries?"
+                                                                            ],
+                                                         "expected_concepts":  [
+                                                                                   "PostgreSQL query plan analysis with EXPLAIN ANALYZE",
+                                                                                   "Index types and multicolumn index design",
+                                                                                   "Concurrency and locking trade-offs during updates",
+                                                                                   "Measurable latency reduction validation"
+                                                                               ],
+                                                         "skill_tag_id":  "3408ff76-6595-4111-8c1c-50271a14eb3f",
+                                                         "source":  "resume_jd",
+                                                         "source_tags":  [
+                                                                             "resume_jd"
+                                                                         ],
+                                                         "question_seed_sources":  [
+                                                                                       "resume_jd",
+                                                                                       "resume_jd"
+                                                                                   ],
+                                                         "expected_concept_sources":  [
+                                                                                          "resume_jd",
+                                                                                          "resume_jd",
+                                                                                          "resume_jd",
+                                                                                          "resume_jd"
+                                                                                      ]
+                                                     },
+                                                     {
+                                                         "name":  "Containerization and Docker Workflow",
+                                                         "question_seeds":  [
+                                                                                "How did you structure the Docker-based local environments and CI checks for the Python and FastAPI services at Meridian Analytics?",
+                                                                                "In what ways did your containerization work improve deployment rollbacks and on-call runbooks?"
+                                                                            ],
+                                                         "expected_concepts":  [
+                                                                                   "Docker multi-stage builds and local environment parity",
+                                                                                   "CI pipeline integration for Python services",
+                                                                                   "Deployment rollback strategies and runbook documentation",
+                                                                                   "FastAPI deployment best practices"
+                                                                               ],
+                                                         "skill_tag_id":  "9c79fa20-dcce-47f8-ad73-c41fd5640c5e",
+                                                         "source":  "resume_jd",
+                                                         "source_tags":  [
+                                                                             "resume_jd"
+                                                                         ],
+                                                         "question_seed_sources":  [
+                                                                                       "resume_jd",
+                                                                                       "resume_jd"
+                                                                                   ],
+                                                         "expected_concept_sources":  [
+                                                                                          "resume_jd",
+                                                                                          "resume_jd",
+                                                                                          "resume_jd",
+                                                                                          "resume_jd"
+                                                                                      ]
+                                                     },
+                                                     {
+                                                         "name":  "Observability and Production Incident Investigation",
+                                                         "question_seeds":  [
+                                                                                "How do you use structured logs, metrics, and trace IDs in collaboration with product and data teams to investigate production incidents?",
+                                                                                "Can you share an example of how Prometheus and Grafana were leveraged to diagnose a complex backend issue?"
+                                                                            ],
+                                                         "expected_concepts":  [
+                                                                                   "Structured logging and correlation ID propagation",
+                                                                                   "Metric collection and dashboarding with Prometheus and Grafana",
+                                                                                   "Cross-functional incident response collaboration",
+                                                                                   "Root cause analysis methodologies"
+                                                                               ],
+                                                         "skill_tag_id":  "b24b617c-68b3-482b-9845-9689f8f41471",
+                                                         "source":  "resume_jd",
+                                                         "source_tags":  [
+                                                                             "resume_jd"
+                                                                         ],
+                                                         "question_seed_sources":  [
+                                                                                       "resume_jd",
+                                                                                       "resume_jd"
+                                                                                   ],
+                                                         "expected_concept_sources":  [
+                                                                                          "resume_jd",
+                                                                                          "resume_jd",
+                                                                                          "resume_jd",
+                                                                                          "resume_jd"
+                                                                                      ]
+                                                     },
+                                                     {
+                                                         "name":  "RESTful API Development and Caching with Python",
+                                                         "question_seeds":  [
+                                                                                "When building Python REST endpoints backed by PostgreSQL and Redis at Cedar Labs, how did you decide when to utilize Redis versus hitting the database?",
+                                                                                "How did you manage schema changes and integration testing alongside application and analytics teams?"
+                                                                            ],
+                                                         "expected_concepts":  [
+                                                                                   "RESTful API design principles in Python",
+                                                                                   "Caching strategies and invalidation patterns with Redis",
+                                                                                   "Integration testing frameworks and test coverage",
+                                                                                   "Collaborative database schema review workflows"
+                                                                               ],
+                                                         "skill_tag_id":  "5768bc85-4cde-48d9-9da4-f3a1189ef08f",
+                                                         "source":  "resume_jd",
+                                                         "source_tags":  [
+                                                                             "resume_jd"
+                                                                         ],
+                                                         "question_seed_sources":  [
+                                                                                       "resume_jd",
+                                                                                       "resume_jd"
+                                                                                   ],
+                                                         "expected_concept_sources":  [
+                                                                                          "resume_jd",
+                                                                                          "resume_jd",
+                                                                                          "resume_jd",
+                                                                                          "resume_jd"
+                                                                                      ]
+                                                     }
+                                                 ],
+                                 "intro_voice":  {
+                                                     "transport":  "real WebSocket",
+                                                     "audio_source":  "local Kokoro-generated WAV fixtures",
+                                                     "answers":  [
+                                                                     {
+                                                                         "audio_file":  "main\\scripts\\e2e-fixtures\\audio\\intro-1.wav",
+                                                                         "transcript":  "I am a back-end engineer with about four years of experience. I have mainly worked with Python, Kafka, and PostgreSQL, and I enjoy designing services that stay reliable as traffic grows.",
+                                                                         "text_similarity":  0.997,
+                                                                         "next_question":  "Could you walk me through a specific project where you scaled a service using Kafka and PostgreSQL under high traffic?"
+                                                                     },
+                                                                     {
+                                                                         "audio_file":  "main\\scripts\\e2e-fixtures\\audio\\intro-2.wav",
+                                                                         "transcript":  "One project I owned was a Kafka pipeline processing around 10,000 events per second. I built idempotent consumers and retries for duplicates and delayed events and tracked P90 latency under 200 milliseconds.",
+                                                                         "text_similarity":  0.894,
+                                                                         "next_question":  "Could you elaborate on the approach you took to keep the P90 latency under 200 milliseconds while handling duplicate and delayed events in your Kafka pipeline?"
+                                                                     },
+                                                                     {
+                                                                         "audio_file":  "main\\scripts\\e2e-fixtures\\audio\\intro-3.wav",
+                                                                         "transcript":  "I am interested in payment systems because correctness and reliability matter as much as throughput. I have not worked directly with a payment ledger yet, but I have handled transactional data and production incidents, and I would be deliberate about learning reconciliation requirements.",
+                                                                         "text_similarity":  1.0
+                                                                     }
+                                                                 ],
+                                                     "messages":  [
+                                                                      "snapshot",
+                                                                      "state",
+                                                                      "state",
+                                                                      "question_start",
+                                                                      "question_chunk",
+                                                                      "question_end",
+                                                                      "state",
+                                                                      "state",
+                                                                      "transcript",
+                                                                      "state",
+                                                                      "state",
+                                                                      "transcript",
+                                                                      "state",
+                                                                      "state",
+                                                                      "transcript",
+                                                                      "state",
+                                                                      "state",
+                                                                      "state",
+                                                                      "transcript",
+                                                                      "state",
+                                                                      "question_start",
+                                                                      "question_chunk",
+                                                                      "question_chunk",
+                                                                      "question_end",
+                                                                      "state",
+                                                                      "state",
+                                                                      "transcript",
+                                                                      "state",
+                                                                      "state",
+                                                                      "transcript",
+                                                                      "state",
+                                                                      "state",
+                                                                      "transcript",
+                                                                      "state",
+                                                                      "state",
+                                                                      "transcript",
+                                                                      "state",
+                                                                      "state",
+                                                                      "state",
+                                                                      "transcript",
+                                                                      "state",
+                                                                      "question_start",
+                                                                      "question_chunk",
+                                                                      "question_chunk",
+                                                                      "question_end",
+                                                                      "state",
+                                                                      "state",
+                                                                      "transcript",
+                                                                      "state",
+                                                                      "state",
+                                                                      "transcript",
+                                                                      "state",
+                                                                      "state",
+                                                                      "transcript",
+                                                                      "state",
+                                                                      "state",
+                                                                      "transcript",
+                                                                      "state",
+                                                                      "state",
+                                                                      "state",
+                                                                      "transcript",
+                                                                      "snapshot",
+                                                                      "intro_complete"
+                                                                  ],
+                                                     "initial_question":  "Tell me about yourself.",
+                                                     "main_session_status":  "in_progress",
+                                                     "intro_complete":  true
+                                                 },
+                                 "intro_summary":  {
+                                                       "background":  "Back-end engineer with about four years of experience, mainly working with Python, Kafka, and PostgreSQL. Enjoys designing services that stay reliable as traffic grows and is interested in payment systems.",
+                                                       "stated_strengths":  [
+                                                                                "Designing reliable services for growing traffic",
+                                                                                "Handling transactional data and production incidents"
+                                                                            ],
+                                                       "notable_projects":  [
+                                                                                "Kafka pipeline processing around 10,000 events per second with idempotent consumers and retries for duplicates and delayed events, maintaining P90 latency under 200 milliseconds"
+                                                                            ],
+                                                       "preferred_technologies":  [
+                                                                                      "Python",
+                                                                                      "Kafka",
+                                                                                      "PostgreSQL"
+                                                                                  ]
+                                                   },
+                                 "intro_metadata":  {
+                                                        "model_used":  "gemini-3.5-flash-lite",
+                                                        "provisional":  false
+                                                    },
+                                 "intro_round":  {
+                                                     "answers":  [
+                                                                     "I am a back-end engineer with about four years of experience. I have mainly worked with Python, Kafka, and PostgreSQL, and I enjoy designing services that stay reliable as traffic grows.",
+                                                                     "One project I owned was a Kafka pipeline processing around 10,000 events per second. I built idempotent consumers and retries for duplicates and delayed events and tracked P90 latency under 200 milliseconds.",
+                                                                     "I am interested in payment systems because correctness and reliability matter as much as throughput. I have not worked directly with a payment ledger yet, but I have handled transactional data and production incidents, and I would be deliberate about learning reconciliation requirements."
+                                                                 ],
+                                                     "question":  "",
+                                                     "follow_up_count":  2,
+                                                     "provisional":  false,
+                                                     "models_used":  [
+                                                                         "gemini-3.5-flash-lite",
+                                                                         "gemini-3.5-flash-lite",
+                                                                         "gemini-3.5-flash-lite"
+                                                                     ],
+                                                     "status":  "completed"
+                                                 },
+                                 "main_interview_first_question":  "Can you walk through how you designed the Kafka event pipeline at Meridian Analytics to handle 10,000 events per second, and how you implemented idempotent consumers and bounded retries while keeping p95 latency below 200 ms?",
+                                 "answer_timings_ms":  [
+                                                           3556.8,
+                                                           5289.8,
+                                                           3646.4,
+                                                           6037.7,
+                                                           3772.2
+                                                       ],
+                                 "end_websocket":  {
+                                                       "attempted":  true,
+                                                       "events":  [
+                                                                      "snapshot",
+                                                                      "state",
+                                                                      "state",
+                                                                      "question_start",
+                                                                      "question_chunk",
+                                                                      "question_chunk",
+                                                                      "question_chunk",
+                                                                      "question_end",
+                                                                      "snapshot"
+                                                                  ],
+                                                       "final_status":  "completed"
+                                                   },
+                                 "status":  "completed",
+                                 "turns":  [
+                                               {
+                                                   "turn_index":  0,
+                                                   "question":  "Can you walk through how you designed the Kafka event pipeline at Meridian Analytics to handle 10,000 events per second, and how you implemented idempotent consumers and bounded retries while keeping p95 latency below 200 ms?",
+                                                   "answer":  "I owned a Kafka pipeline processing about 10,000 events per second. I used idempotent consumers, bounded retries, and monitoring for delayed or duplicate events. We measured p95 processing latency below 200 milliseconds and tested replay behavior before rollout.",
+                                                   "action_taken":  null,
+                                                   "topic":  "Kafka Real-Time Event Pipeline at Meridian Analytics",
+                                                   "generated_by_model":  "gemini-3.5-flash-lite",
+                                                   "provisional":  true,
+                                                   "decision":  {
+                                                                    "requested_action":  "follow_up",
+                                                                    "executed_action":  "follow_up",
+                                                                    "rationale":  "The candidate\u0027s initial answer was too high-level and lacked technical depth regarding partition strategy, retry bounds, and dead-letter queues. A follow-up is necessary to probe deeper into the specific implementation details of the idempotent consumers and how they handled the bounded retries without violating the latency threshold.",
+                                                                    "model_used":  "gemini-3.5-flash-lite",
+                                                                    "provisional":  true
+                                                                },
+                                                   "score":  {
+                                                                 "technical_correctness":  3.0,
+                                                                 "completeness":  3.0,
+                                                                 "communication":  4.0,
+                                                                 "problem_solving":  3.0
+                                                             },
+                                                   "missing_concepts":  [
+                                                                            "Kafka partition strategy and throughput management",
+                                                                            "Bounded retry patterns and dead-letter queues",
+                                                                            "Latency profiling and p95 optimization"
+                                                                        ],
+                                                   "feedback":  "The candidate mentions the key elements like idempotent consumers and p95 latency, but the explanation is too high-level and lacks specific technical details on how the partition strategy, retry bounds, dead-letter queues, or latency profiling were implemented.",
+                                                   "scored_by_model":  "gemini-3.5-flash-lite",
+                                                   "score_provisional":  true
+                                               },
+                                               {
+                                                   "turn_index":  1,
+                                                   "question":  "Could you dive a bit deeper into the technical specifics? Specifically, how did you choose your partition strategy to maintain throughput at 10,000 events per second, and how did you implement the bounded retries and dead-letter queue mechanism without letting retries spike your p95 latency?",
+                                                   "answer":  "I owned a Kafka pipeline processing about 10,000 events per second. I used idempotent consumers, bounded retries, and monitoring for delayed or duplicate events. We measured p95 processing latency below 200 milliseconds and tested replay behavior before rollout.",
+                                                   "action_taken":  "follow_up",
+                                                   "topic":  "Kafka Real-Time Event Pipeline at Meridian Analytics",
+                                                   "generated_by_model":  "gemini-3.5-flash-lite",
+                                                   "provisional":  true,
+                                                   "decision":  {
+                                                                    "requested_action":  "move_on",
+                                                                    "executed_action":  "move_on",
+                                                                    "rationale":  "The candidate has repeated the same high-level resume bullet points twice without answering the specific technical probes about partition strategy, retry bounds, or dead-letter queues. To keep the interview moving productively, it is best to transition to the next topic in the plan.",
+                                                                    "model_used":  "gemini-3.5-flash-lite",
+                                                                    "provisional":  true
+                                                                },
+                                                   "score":  {
+                                                                 "technical_correctness":  2.0,
+                                                                 "completeness":  2.0,
+                                                                 "communication":  3.0,
+                                                                 "problem_solving":  2.0
+                                                             },
+                                                   "missing_concepts":  [
+                                                                            "Kafka partition strategy and throughput management",
+                                                                            "Bounded retry patterns and dead-letter queues",
+                                                                            "Latency profiling and p95 optimization"
+                                                                        ],
+                                                   "feedback":  "The candidate repeated general high-level metrics from their resume but failed to address the specific technical details asked in the prompt, such as partition strategy, dead-letter queue implementation details, and how retries were isolated to prevent latency spikes.",
+                                                   "scored_by_model":  "gemini-3.5-flash-lite",
+                                                   "score_provisional":  true
+                                               },
+                                               {
+                                                   "turn_index":  2,
+                                                   "question":  "What specific changes did you make to the PostgreSQL indexes and query plans for the reporting API that resulted in a 42% reduction in p95 latency, and how did you ensure correctness while handling concurrent updates?",
+                                                   "answer":  "I used PostgreSQL query plans and indexes to reduce a reporting API\u0027s p95 latency by 42%. I checked representative plans and write cost, then tested concurrent updates and rollback behavior before releasing the schema change.",
+                                                   "action_taken":  "move_on",
+                                                   "topic":  "PostgreSQL Performance Tuning and Indexing",
+                                                   "generated_by_model":  "gemini-3.5-flash-lite",
+                                                   "provisional":  true,
+                                                   "decision":  {
+                                                                    "requested_action":  "follow_up",
+                                                                    "executed_action":  "follow_up",
+                                                                    "rationale":  "The candidate has twice provided high-level summaries without detailing the specifics of EXPLAIN ANALYZE, index types, or multicolumn index design. A direct follow-up targeting these missing concepts is necessary to properly evaluate their PostgreSQL tuning depth.",
+                                                                    "model_used":  "gemini-3.5-flash-lite",
+                                                                    "provisional":  true
+                                                                },
+                                                   "score":  {
+                                                                 "technical_correctness":  3.0,
+                                                                 "completeness":  3.0,
+                                                                 "communication":  3.0,
+                                                                 "problem_solving":  3.0
+                                                             },
+                                                   "missing_concepts":  [
+                                                                            "PostgreSQL query plan analysis with EXPLAIN ANALYZE",
+                                                                            "Index types and multicolumn index design"
+                                                                        ],
+                                                   "feedback":  "The candidate mentions looking at query plans and testing concurrent updates, but omits specific details regarding EXPLAIN ANALYZE, index types, or multicolumn index design.",
+                                                   "scored_by_model":  "gemini-3.5-flash-lite",
+                                                   "score_provisional":  true
+                                               },
+                                               {
+                                                   "turn_index":  3,
+                                                   "question":  "Could you walk through the exact steps you took with EXPLAIN ANALYZE to identify the bottlenecks in the reporting queries, and what specific index types or multicolumn structures you chose to achieve that 42% latency reduction?",
+                                                   "answer":  "I would clarify the reliability and correctness requirements first, then compare a simple implementation with the operational cost of the alternatives. I would test failure cases, define a measurable SLO, and use production metrics to validate the result.",
+                                                   "action_taken":  "follow_up",
+                                                   "topic":  "PostgreSQL Performance Tuning and Indexing",
+                                                   "generated_by_model":  "gemini-3.5-flash-lite",
+                                                   "provisional":  true,
+                                                   "decision":  {
+                                                                    "requested_action":  "move_on",
+                                                                    "executed_action":  "move_on",
+                                                                    "rationale":  "The candidate has repeatedly provided generic, high-level responses instead of addressing specific technical questions across multiple topics. Since we need to cover containerization and Docker workflow within the remaining interview time, it is best to move on to the next topic.",
+                                                                    "model_used":  "gemini-3.5-flash-lite",
+                                                                    "provisional":  true
+                                                                },
+                                                   "score":  {
+                                                                 "technical_correctness":  1.0,
+                                                                 "completeness":  1.0,
+                                                                 "communication":  3.0,
+                                                                 "problem_solving":  1.0
+                                                             },
+                                                   "missing_concepts":  [
+                                                                            "PostgreSQL query plan analysis with EXPLAIN ANALYZE",
+                                                                            "Index types and multicolumn index design",
+                                                                            "Concurrency and locking trade-offs during updates",
+                                                                            "Measurable latency reduction validation"
+                                                                        ],
+                                                   "feedback":  "The candidate provided a generic response about reliability, failure cases, and metrics, but completely failed to answer the specific technical question asked about EXPLAIN ANALYZE, index types, multicolumn structures, and the query optimization process.",
+                                                   "scored_by_model":  "gemini-3.5-flash-lite",
+                                                   "score_provisional":  true
+                                               },
+                                               {
+                                                   "turn_index":  4,
+                                                   "question":  "How did you structure the Docker-based local environments and CI checks for the Python and FastAPI services at Meridian Analytics, and in what ways did this containerization work improve your deployment rollbacks and on-call runbooks?",
+                                                   "answer":  "I use a multi-stage build, pin dependencies, order stable layers for cache reuse, and exclude local files with .dockerignore. I run as a non-root user, keep secrets out of the image, and use volumes only for data that needs persistence. I check image size and startup behavior in CI.",
+                                                   "action_taken":  "move_on",
+                                                   "topic":  "Containerization and Docker Workflow",
+                                                   "generated_by_model":  "gemini-3.5-flash-lite",
+                                                   "provisional":  true,
+                                                   "decision":  {
+                                                                    "requested_action":  "follow_up",
+                                                                    "executed_action":  "follow_up",
+                                                                    "rationale":  "The candidate gave good technical details on Docker best practices for FastAPI, but completely missed the second part of the question regarding how this containerization work specifically improved deployment rollbacks and on-call runbooks. A follow-up is needed to cover that aspect of their resume experience.",
+                                                                    "model_used":  "gemini-3.5-flash-lite",
+                                                                    "provisional":  true
+                                                                },
+                                                   "score":  {
+                                                                 "technical_correctness":  4.0,
+                                                                 "completeness":  3.0,
+                                                                 "communication":  4.0,
+                                                                 "problem_solving":  3.0
+                                                             },
+                                                   "missing_concepts":  [
+                                                                            "Deployment rollback strategies and runbook documentation"
+                                                                        ],
+                                                   "feedback":  "The candidate provides solid technical practices for containerizing Python and FastAPI services, such as multi-stage builds, non-root users, and caching. However, the response completely misses the second half of the question regarding how this work specifically improved deployment rollbacks and on-call runbooks.",
+                                                   "scored_by_model":  "gemini-3.5-flash-lite",
+                                                   "score_provisional":  true
+                                               },
+                                               {
+                                                   "turn_index":  5,
+                                                   "question":  "Building on your Docker practices, could you specifically explain how containerization helped improve your deployment rollback procedures and on-call runbooks during incidents at Meridian Analytics?",
+                                                   "answer":  null,
+                                                   "action_taken":  "follow_up",
+                                                   "topic":  "Containerization and Docker Workflow",
+                                                   "generated_by_model":  "gemini-3.5-flash-lite",
+                                                   "provisional":  true,
+                                                   "decision":  null
+                                               }
+                                           ],
+                                 "report":  {
+                                                "summary":  "The candidate discussed their experience with a Kafka event pipeline, PostgreSQL query optimization, and Docker containerization for Python and FastAPI services. Throughout the interview, the candidate frequently provided high-level summaries and repeated resume metrics instead of diving into specific technical details. They missed opportunities to explain Kafka partition strategies, dead-letter queue implementations, EXPLAIN ANALYZE specifics, and how containerization directly improved deployment rollbacks and on-call runbooks.",
+                                                "improvement_suggestions":  [
+                                                                                "Provide granular technical details when asked about system design and architecture, specifically covering partition strategies, dead-letter queues, and latency profiling.",
+                                                                                "Elaborate on database optimization by discussing exact EXPLAIN ANALYZE findings, specific index types (such as B-tree or GIN), and multicolumn index structures.",
+                                                                                "Ensure all parts of a multi-part question are answered thoroughly, such as connecting containerization practices to deployment rollbacks and on-call runbooks.",
+                                                                                "Avoid using generic templates or high-level process descriptions when specific technical implementations are requested."
+                                                                            ],
+                                                "id":  "25fc2cae-0d81-4b92-9166-406dd9f6b3f0",
+                                                "session_id":  "90ff0713-c961-40af-945f-0d84166fc472",
+                                                "overall_score":  2.7,
+                                                "generated_by_model":  "gemini-3.5-flash-lite",
+                                                "provisional":  true
+                                            },
+                                 "topic_coverage":  {
+                                                        "Kafka Real-Time Event Pipeline at Meridian Analytics":  "covered",
+                                                        "PostgreSQL Performance Tuning and Indexing":  "covered",
+                                                        "Containerization and Docker Workflow":  "in_progress",
+                                                        "Observability and Production Incident Investigation":  "not_started",
+                                                        "RESTful API Development and Caching with Python":  "not_started"
+                                                    },
+                                 "candidate_intro_summary_used_in_plan":  {
+                                                                              "background":  "Back-end engineer with about four years of experience, mainly working with Python, Kafka, and PostgreSQL. Enjoys designing services that stay reliable as traffic grows and is interested in payment systems.",
+                                                                              "stated_strengths":  [
+                                                                                                       "Designing reliable services for growing traffic",
+                                                                                                       "Handling transactional data and production incidents"
+                                                                                                   ],
+                                                                              "notable_projects":  [
+                                                                                                       "Kafka pipeline processing around 10,000 events per second with idempotent consumers and retries for duplicates and delayed events, maintaining P90 latency under 200 milliseconds"
+                                                                                                   ],
+                                                                              "preferred_technologies":  [
+                                                                                                             "Python",
+                                                                                                             "Kafka",
+                                                                                                             "PostgreSQL"
+                                                                                                         ]
+                                                                          },
+                                 "web_research_sources":  [
+
+                                                          ]
+                             },
+                  "job":  {
+                              "session_id":  "6407bc88-95a0-48d0-aad9-24c7aa5bef04",
+                              "initial_question":  "Tell me about yourself.",
+                              "preparation_elapsed_ms":  5025.7,
+                              "create_and_prepare_elapsed_ms":  5052.3,
+                              "preparation_status":  "ready",
+                              "plan_topics":  [
+                                                  {
+                                                      "name":  "Distributed Systems and Message Delivery Semantics",
+                                                      "question_seeds":  [
+                                                                             "In your work at Meridian Analytics with the Kafka-based event pipeline, how did you implement idempotent consumers, and what strategies did you use to handle out-of-order event delivery?",
+                                                                             "Can you discuss how you would design an exactly-once or effectively-once processing guarantee for a financial event stream where duplicate messages could trigger erroneous state changes?"
+                                                                         ],
+                                                      "expected_concepts":  [
+                                                                                "Idempotency keys",
+                                                                                "At-least-once vs at-most-once delivery",
+                                                                                "State deduplication",
+                                                                                "Handling delayed or out-of-order messages"
+                                                                            ],
+                                                      "skill_tag_id":  "9f6f954e-ba15-414c-bfd4-33c75de139d7",
+                                                      "source":  "resume_jd",
+                                                      "source_tags":  [
+                                                                          "resume_jd"
+                                                                      ],
+                                                      "question_seed_sources":  [
+                                                                                    "resume_jd",
+                                                                                    "resume_jd"
+                                                                                ],
+                                                      "expected_concept_sources":  [
+                                                                                       "resume_jd",
+                                                                                       "resume_jd",
+                                                                                       "resume_jd",
+                                                                                       "resume_jd"
+                                                                                   ]
+                                                  },
+                                                  {
+                                                      "name":  "PostgreSQL Performance Tuning and Indexing",
+                                                      "question_seeds":  [
+                                                                             "You mentioned reworking PostgreSQL indexes and query plans to reduce reporting API latency by 42%. Walk me through your process of diagnosing the slow queries using EXPLAIN ANALYZE.",
+                                                                             "How do you approach managing schema evolution and concurrent updates in PostgreSQL without causing table locks or degrading transactional correctness?"
+                                                                         ],
+                                                      "expected_concepts":  [
+                                                                                "Query execution plans",
+                                                                                "B-tree and specialized index types",
+                                                                                "Concurrency control and locking",
+                                                                                "Index maintenance overhead"
+                                                                            ],
+                                                      "skill_tag_id":  "3408ff76-6595-4111-8c1c-50271a14eb3f",
+                                                      "source":  "resume_jd",
+                                                      "source_tags":  [
+                                                                          "resume_jd"
+                                                                      ],
+                                                      "question_seed_sources":  [
+                                                                                    "resume_jd",
+                                                                                    "resume_jd"
+                                                                                ],
+                                                      "expected_concept_sources":  [
+                                                                                       "resume_jd",
+                                                                                       "resume_jd",
+                                                                                       "resume_jd",
+                                                                                       "resume_jd"
+                                                                                   ]
+                                                  },
+                                                  {
+                                                      "name":  "Financial Domain and Ledger Concepts",
+                                                      "question_seeds":  [
+                                                                             "The role requires familiarity with payment lifecycles, ledger concepts, and reconciliation. Given that your resume does not explicitly mention payments, how would you approach learning ledger design and ensuring double-entry consistency?",
+                                                                             "How do you design a database schema and state machine for a payment transaction to safely handle partial failures, retries, and asynchronous webhook notifications?"
+                                                                         ],
+                                                      "expected_concepts":  [
+                                                                                "Double-entry bookkeeping",
+                                                                                "Transaction state machines",
+                                                                                "Reconciliation processes",
+                                                                                "Handling domain knowledge gaps"
+                                                                            ],
+                                                      "skill_tag_id":  "4102aba7-c788-4954-871d-b33b92961799",
+                                                      "source":  "resume_jd",
+                                                      "source_tags":  [
+                                                                          "resume_jd"
+                                                                      ],
+                                                      "question_seed_sources":  [
+                                                                                    "resume_jd",
+                                                                                    "resume_jd"
+                                                                                ],
+                                                      "expected_concept_sources":  [
+                                                                                       "resume_jd",
+                                                                                       "resume_jd",
+                                                                                       "resume_jd",
+                                                                                       "resume_jd"
+                                                                                   ]
+                                                  },
+                                                  {
+                                                      "name":  "Observability and Production Incident Response",
+                                                      "question_seeds":  [
+                                                                             "You partnered with product and data teams using structured logs, metrics, and trace IDs. Can you walk through a specific incident you triaged and how you defined SLOs for that service?",
+                                                                             "When dealing with cascading failures or high latency spikes in a FastAPI and Kafka architecture, what is your systematic approach to debugging using Prometheus and Grafana?"
+                                                                         ],
+                                                      "expected_concepts":  [
+                                                                                "Structured logging",
+                                                                                "Distributed tracing",
+                                                                                "SLOs and error budgets",
+                                                                                "Root cause analysis"
+                                                                            ],
+                                                      "skill_tag_id":  "fede089e-720c-46a6-8a0d-d211c9399adb",
+                                                      "source":  "resume_jd",
+                                                      "source_tags":  [
+                                                                          "resume_jd"
+                                                                      ],
+                                                      "question_seed_sources":  [
+                                                                                    "resume_jd",
+                                                                                    "resume_jd"
+                                                                                ],
+                                                      "expected_concept_sources":  [
+                                                                                       "resume_jd",
+                                                                                       "resume_jd",
+                                                                                       "resume_jd",
+                                                                                       "resume_jd"
+                                                                                   ]
+                                                  }
+                                              ],
+                              "intro_voice":  {
+                                                  "transport":  "real WebSocket",
+                                                  "audio_source":  "local Kokoro-generated WAV fixtures",
+                                                  "answers":  [
+                                                                  {
+                                                                      "audio_file":  "main\\scripts\\e2e-fixtures\\audio\\intro-1.wav",
+                                                                      "transcript":  "I am a back-end engineer with about four years of experience. I have mainly worked with Python, Kafka, and PostgreSQL, and I enjoy designing services that stay reliable as traffic grows.",
+                                                                      "text_similarity":  0.997,
+                                                                      "next_question":  "Could you tell me more about a specific service you designed that scaled well, and what role you played in managing that traffic growth?"
+                                                                  },
+                                                                  {
+                                                                      "audio_file":  "main\\scripts\\e2e-fixtures\\audio\\intro-2.wav",
+                                                                      "transcript":  "One project I owned was a Kafka pipeline processing around 10,000 events per second. I built idempotent consumers and retries for duplicates and delayed events and tracked P90 latency under 200 milliseconds.",
+                                                                      "text_similarity":  0.894,
+                                                                      "next_question":  "Could you elaborate on the approach you took to keep the P90 latency under 200 milliseconds while handling duplicate and delayed events in your Kafka pipeline?"
+                                                                  },
+                                                                  {
+                                                                      "audio_file":  "main\\scripts\\e2e-fixtures\\audio\\intro-3.wav",
+                                                                      "transcript":  "I am interested in payment systems because correctness and reliability matter as much as throughput. I have not worked directly with a payment ledger yet, but I have handled transactional data and production incidents, and I would be deliberate about learning reconciliation requirements.",
+                                                                      "text_similarity":  1.0
+                                                                  }
+                                                              ],
+                                                  "messages":  [
+                                                                   "snapshot",
+                                                                   "state",
+                                                                   "state",
+                                                                   "question_start",
+                                                                   "question_chunk",
+                                                                   "question_end",
+                                                                   "state",
+                                                                   "state",
+                                                                   "transcript",
+                                                                   "state",
+                                                                   "state",
+                                                                   "transcript",
+                                                                   "state",
+                                                                   "state",
+                                                                   "transcript",
+                                                                   "state",
+                                                                   "state",
+                                                                   "state",
+                                                                   "transcript",
+                                                                   "state",
+                                                                   "question_start",
+                                                                   "question_chunk",
+                                                                   "question_chunk",
+                                                                   "question_end",
+                                                                   "state",
+                                                                   "state",
+                                                                   "transcript",
+                                                                   "state",
+                                                                   "state",
+                                                                   "transcript",
+                                                                   "state",
+                                                                   "state",
+                                                                   "transcript",
+                                                                   "state",
+                                                                   "state",
+                                                                   "transcript",
+                                                                   "state",
+                                                                   "state",
+                                                                   "state",
+                                                                   "transcript",
+                                                                   "state",
+                                                                   "question_start",
+                                                                   "question_chunk",
+                                                                   "question_chunk",
+                                                                   "question_end",
+                                                                   "state",
+                                                                   "state",
+                                                                   "transcript",
+                                                                   "state",
+                                                                   "state",
+                                                                   "transcript",
+                                                                   "state",
+                                                                   "state",
+                                                                   "transcript",
+                                                                   "state",
+                                                                   "state",
+                                                                   "transcript",
+                                                                   "state",
+                                                                   "state",
+                                                                   "state",
+                                                                   "transcript",
+                                                                   "snapshot",
+                                                                   "intro_complete"
+                                                               ],
+                                                  "initial_question":  "Tell me about yourself.",
+                                                  "main_session_status":  "in_progress",
+                                                  "intro_complete":  true
+                                              },
+                              "intro_summary":  {
+                                                    "background":  "Back-end engineer with about four years of experience, mainly working with Python, Kafka, and PostgreSQL, focusing on designing reliable services and handling transactional data.",
+                                                    "stated_strengths":  [
+                                                                             "Designing services that stay reliable as traffic grows",
+                                                                             "Handling transactional data and production incidents"
+                                                                         ],
+                                                    "notable_projects":  [
+                                                                             "Kafka pipeline processing around 10,000 events per second with idempotent consumers and retries for duplicates and delayed events, maintaining a P90 latency under 200 milliseconds"
+                                                                         ],
+                                                    "preferred_technologies":  [
+                                                                                   "Python",
+                                                                                   "Kafka",
+                                                                                   "PostgreSQL"
+                                                                               ]
+                                                },
+                              "intro_metadata":  {
+                                                     "model_used":  "gemini-3.5-flash-lite",
+                                                     "provisional":  false
+                                                 },
+                              "intro_round":  {
+                                                  "answers":  [
+                                                                  "I am a back-end engineer with about four years of experience. I have mainly worked with Python, Kafka, and PostgreSQL, and I enjoy designing services that stay reliable as traffic grows.",
+                                                                  "One project I owned was a Kafka pipeline processing around 10,000 events per second. I built idempotent consumers and retries for duplicates and delayed events and tracked P90 latency under 200 milliseconds.",
+                                                                  "I am interested in payment systems because correctness and reliability matter as much as throughput. I have not worked directly with a payment ledger yet, but I have handled transactional data and production incidents, and I would be deliberate about learning reconciliation requirements."
+                                                              ],
+                                                  "question":  "",
+                                                  "follow_up_count":  2,
+                                                  "provisional":  false,
+                                                  "models_used":  [
+                                                                      "gemini-3.5-flash-lite",
+                                                                      "gemini-3.5-flash-lite",
+                                                                      "gemini-3.5-flash-lite"
+                                                                  ],
+                                                  "status":  "completed"
+                                              },
+                              "main_interview_first_question":  "In your work at Meridian Analytics with the Kafka-based event pipeline, how did you implement idempotent consumers, and what strategies did you use to handle out-of-order event delivery?",
+                              "answer_timings_ms":  [
+                                                        4347.5,
+                                                        5279.0,
+                                                        3877.9,
+                                                        6382.1,
+                                                        3795.3
+                                                    ],
+                              "end_websocket":  {
+                                                    "attempted":  true,
+                                                    "events":  [
+                                                                   "snapshot",
+                                                                   "state",
+                                                                   "state",
+                                                                   "question_start",
+                                                                   "question_chunk",
+                                                                   "question_chunk",
+                                                                   "question_chunk",
+                                                                   "question_chunk",
+                                                                   "question_end",
+                                                                   "snapshot"
+                                                               ],
+                                                    "final_status":  "completed"
+                                                },
+                              "status":  "completed",
+                              "turns":  [
+                                            {
+                                                "turn_index":  0,
+                                                "question":  "In your work at Meridian Analytics with the Kafka-based event pipeline, how did you implement idempotent consumers, and what strategies did you use to handle out-of-order event delivery?",
+                                                "answer":  "I owned a Kafka pipeline processing about 10,000 events per second. I used idempotent consumers, bounded retries, and monitoring for delayed or duplicate events. We measured p95 processing latency below 200 milliseconds and tested replay behavior before rollout.",
+                                                "action_taken":  null,
+                                                "topic":  "Distributed Systems and Message Delivery Semantics",
+                                                "generated_by_model":  "gemini-3.5-flash-lite",
+                                                "provisional":  true,
+                                                "decision":  {
+                                                                 "requested_action":  "follow_up",
+                                                                 "executed_action":  "follow_up",
+                                                                 "rationale":  "The candidate mentioned using idempotent consumers and replay testing in their Kafka pipeline, but omitted the technical details of how deduplication (such as idempotency keys or stores) and out-of-order event handling were implemented. A follow-up is necessary to probe these specifics before moving on.",
+                                                                 "model_used":  "gemini-3.5-flash-lite",
+                                                                 "provisional":  true
+                                                             },
+                                                "score":  {
+                                                              "technical_correctness":  3.0,
+                                                              "completeness":  3.0,
+                                                              "communication":  4.0,
+                                                              "problem_solving":  3.0
+                                                          },
+                                                "missing_concepts":  [
+                                                                         "Idempotency keys",
+                                                                         "At-least-once vs at-most-once delivery",
+                                                                         "State deduplication",
+                                                                         "Handling delayed or out-of-order messages"
+                                                                     ],
+                                                "feedback":  "The candidate mentions using idempotent consumers and testing replay behavior, but does not explain the underlying mechanism such as idempotency keys, state deduplication, or how out-of-order messages were specifically managed.",
+                                                "scored_by_model":  "gemini-3.5-flash-lite",
+                                                "score_provisional":  true
+                                            },
+                                            {
+                                                "turn_index":  1,
+                                                "question":  "Could you dive deeper into the mechanism you used for deduplication? Specifically, how did you store and check idempotency keys, and how did your consumer handle cases where an event arrived significantly out of order?",
+                                                "answer":  "I owned a Kafka pipeline processing about 10,000 events per second. I used idempotent consumers, bounded retries, and monitoring for delayed or duplicate events. We measured p95 processing latency below 200 milliseconds and tested replay behavior before rollout.",
+                                                "action_taken":  "follow_up",
+                                                "topic":  "Distributed Systems and Message Delivery Semantics",
+                                                "generated_by_model":  "gemini-3.5-flash-lite",
+                                                "provisional":  true,
+                                                "decision":  {
+                                                                 "requested_action":  "move_on",
+                                                                 "executed_action":  "move_on",
+                                                                 "rationale":  "The candidate has twice repeated identical high-level resume bullet points without answering the specific technical questions about idempotency key storage or out-of-order event handling. To keep the interview productive, I should move on to database performance tuning.",
+                                                                 "model_used":  "gemini-3.5-flash-lite",
+                                                                 "provisional":  true
+                                                             },
+                                                "score":  {
+                                                              "technical_correctness":  2.0,
+                                                              "completeness":  2.0,
+                                                              "communication":  3.0,
+                                                              "problem_solving":  2.0
+                                                          },
+                                                "missing_concepts":  [
+                                                                         "Idempotency keys",
+                                                                         "At-least-once vs at-most-once delivery",
+                                                                         "State deduplication",
+                                                                         "Handling delayed or out-of-order messages"
+                                                                     ],
+                                                "feedback":  "The candidate\u0027s answer repeats general high-level details from the resume summary rather than diving deeper into the specific mechanisms requested, such as how idempotency keys were stored/checked or how out-of-order events were handled by the consumer.",
+                                                "scored_by_model":  "gemini-3.5-flash-lite",
+                                                "score_provisional":  true
+                                            },
+                                            {
+                                                "turn_index":  2,
+                                                "question":  "You mentioned reworking PostgreSQL indexes and query plans for a reporting API to reduce p95 query latency by 42%. Walk me through your process of diagnosing those slow queries and how you evaluated the trade-offs of the new indexes while maintaining correctness for concurrent updates.",
+                                                "answer":  "I used PostgreSQL query plans and indexes to reduce a reporting API\u0027s p95 latency by 42%. I checked representative plans and write cost, then tested concurrent updates and rollback behavior before releasing the schema change.",
+                                                "action_taken":  "move_on",
+                                                "topic":  "PostgreSQL Performance Tuning and Indexing",
+                                                "generated_by_model":  "gemini-3.5-flash-lite",
+                                                "provisional":  true,
+                                                "decision":  {
+                                                                 "requested_action":  "follow_up",
+                                                                 "executed_action":  "follow_up",
+                                                                 "rationale":  "The candidate has mentioned checking query plans and considering write costs, but has not yet addressed the specific index types used, index maintenance overhead, or how concurrent updates and locks were managed during the schema updates. I will follow up to probe deeper into these specifics.",
+                                                                 "model_used":  "gemini-3.5-flash-lite",
+                                                                 "provisional":  true
+                                                             },
+                                                "score":  {
+                                                              "technical_correctness":  3.0,
+                                                              "completeness":  3.0,
+                                                              "communication":  3.0,
+                                                              "problem_solving":  3.0
+                                                          },
+                                                "missing_concepts":  [
+                                                                         "B-tree and specialized index types",
+                                                                         "Index maintenance overhead"
+                                                                     ],
+                                                "feedback":  "The candidate\u0027s answer covers the general steps of checking query plans and considering write costs, but lacks specific details on index types (like B-trees) and index maintenance overhead. More depth on how concurrent updates and locks were handled would improve the response.",
+                                                "scored_by_model":  "gemini-3.5-flash-lite",
+                                                "score_provisional":  true
+                                            },
+                                            {
+                                                "turn_index":  3,
+                                                "question":  "Could you elaborate on the specific index types you selected—such as B-tree or partial indexes—and how you accounted for the index maintenance overhead and write locking implications during concurrent updates on that reporting table?",
+                                                "answer":  "I would clarify the reliability and correctness requirements first, then compare a simple implementation with the operational cost of the alternatives. I would test failure cases, define a measurable SLO, and use production metrics to validate the result.",
+                                                "action_taken":  "follow_up",
+                                                "topic":  "PostgreSQL Performance Tuning and Indexing",
+                                                "generated_by_model":  "gemini-3.5-flash-lite",
+                                                "provisional":  true,
+                                                "decision":  {
+                                                                 "requested_action":  "move_on",
+                                                                 "executed_action":  "move_on",
+                                                                 "rationale":  "The candidate\u0027s responses on PostgreSQL performance tuning have repeatedly drifted into generic, high-level talking points without addressing specific technical mechanisms like index types, write locking, or maintenance overhead. It is best to move on to the next topic to maintain interview momentum.",
+                                                                 "model_used":  "gemini-3.5-flash-lite",
+                                                                 "provisional":  true
+                                                             },
+                                                "score":  {
+                                                              "technical_correctness":  2.0,
+                                                              "completeness":  2.0,
+                                                              "communication":  3.0,
+                                                              "problem_solving":  2.0
+                                                          },
+                                                "missing_concepts":  [
+                                                                         "Query execution plans",
+                                                                         "B-tree and specialized index types",
+                                                                         "Concurrency control and locking",
+                                                                         "Index maintenance overhead"
+                                                                     ],
+                                                "feedback":  "The candidate\u0027s answer is entirely generic and avoids addressing the specific technical details asked in the question, such as B-tree versus partial indexes, index maintenance overhead, and write locking implications on concurrent updates.",
+                                                "scored_by_model":  "gemini-3.5-flash-lite",
+                                                "score_provisional":  true
+                                            },
+                                            {
+                                                "turn_index":  4,
+                                                "question":  "The role requires familiarity with payment lifecycles, ledger concepts, and reconciliation. Given that your resume does not explicitly mention payments, how would you approach learning ledger design and ensuring double-entry consistency?",
+                                                "answer":  "I have not built a payment ledger directly. I would first map the invariants and lifecycle, then use immutable entries, idempotency keys, transactional writes, reconciliation, and audit trails. My closest experience is making Kafka consumers safe under retries and duplicate delivery.",
+                                                "action_taken":  "move_on",
+                                                "topic":  "Financial Domain and Ledger Concepts",
+                                                "generated_by_model":  "gemini-3.5-flash-lite",
+                                                "provisional":  true,
+                                                "decision":  {
+                                                                 "requested_action":  "follow_up",
+                                                                 "executed_action":  "follow_up",
+                                                                 "rationale":  "The candidate provided a good high-level approach to learning ledger design and drawing parallels from their transactional experience, but missed the core concept of double-entry bookkeeping fundamentals. I will follow up to ensure they address how debits and credits equal zero and how immutable ledger entries guarantee balance.",
+                                                                 "model_used":  "gemini-3.5-flash-lite",
+                                                                 "provisional":  true
+                                                             },
+                                                "score":  {
+                                                              "technical_correctness":  4.0,
+                                                              "completeness":  3.0,
+                                                              "communication":  4.0,
+                                                              "problem_solving":  4.0
+                                                          },
+                                                "missing_concepts":  [
+                                                                         "Double-entry bookkeeping"
+                                                                     ],
+                                                "feedback":  "The candidate provides a solid approach to learning the domain and highlights relevant transferable skills like idempotency and transactional safety from their Kafka and database background. However, they omit explicit mention of double-entry bookkeeping fundamentals.",
+                                                "scored_by_model":  "gemini-3.5-flash-lite",
+                                                "score_provisional":  true
+                                            },
+                                            {
+                                                "turn_index":  5,
+                                                "question":  "You outlined a solid approach using immutable entries and transactional writes. To build on that, how would you model double-entry bookkeeping in the database schema to ensure that every transaction maintains the fundamental invariant where debits equal credits?",
+                                                "answer":  null,
+                                                "action_taken":  "follow_up",
+                                                "topic":  "Financial Domain and Ledger Concepts",
+                                                "generated_by_model":  "gemini-3.5-flash-lite",
+                                                "provisional":  true,
+                                                "decision":  null
+                                            }
+                                        ],
+                              "report":  {
+                                             "summary":  "During the interview, the candidate discussed their work on a Kafka-based event pipeline at Meridian Analytics, mentioning p95 processing latency and replay testing, but struggled to provide detailed technical mechanisms regarding idempotency keys, state deduplication, and out-of-order event handling, often repeating high-level summary points. When asked about PostgreSQL performance tuning, they mentioned optimizing query plans and reducing latency by 42%, though they omitted specific details on index types like B-trees, maintenance overhead, and concurrency locking. Regarding the financial domain and ledger concepts, the candidate acknowledged they have not built a payment ledger directly, but outlined a strong, transferable approach using immutable entries, transactional writes, and idempotency derived from their previous infrastructure experience.",
+                                             "improvement_suggestions":  [
+                                                                             "Provide specific implementation details when discussing event pipelines, such as how idempotency keys are generated, stored, and checked for deduplication.",
+                                                                             "Explain how out-of-order event delivery or delayed messages are handled in consumers, rather than repeating high-level metrics.",
+                                                                             "In database performance discussions, elaborate on specific index types used (such as B-tree or partial indexes) and explicitly address write locking and index maintenance overhead during concurrent updates.",
+                                                                             "Study and incorporate fundamentals of double-entry bookkeeping when discussing ledger design and financial domain concepts."
+                                                                         ],
+                                             "id":  "129fed41-694c-4bca-9248-f0c2d78c1c50",
+                                             "session_id":  "6407bc88-95a0-48d0-aad9-24c7aa5bef04",
+                                             "overall_score":  2.9,
+                                             "generated_by_model":  "gemini-3.5-flash-lite",
+                                             "provisional":  true
+                                         },
+                              "topic_coverage":  {
+                                                     "Distributed Systems and Message Delivery Semantics":  "covered",
+                                                     "PostgreSQL Performance Tuning and Indexing":  "covered",
+                                                     "Financial Domain and Ledger Concepts":  "in_progress",
+                                                     "Observability and Production Incident Response":  "not_started"
+                                                 },
+                              "candidate_intro_summary_used_in_plan":  {
+                                                                           "background":  "Back-end engineer with about four years of experience, mainly working with Python, Kafka, and PostgreSQL, focusing on designing reliable services and handling transactional data.",
+                                                                           "stated_strengths":  [
+                                                                                                    "Designing services that stay reliable as traffic grows",
+                                                                                                    "Handling transactional data and production incidents"
+                                                                                                ],
+                                                                           "notable_projects":  [
+                                                                                                    "Kafka pipeline processing around 10,000 events per second with idempotent consumers and retries for duplicates and delayed events, maintaining a P90 latency under 200 milliseconds"
+                                                                                                ],
+                                                                           "preferred_technologies":  [
+                                                                                                          "Python",
+                                                                                                          "Kafka",
+                                                                                                          "PostgreSQL"
+                                                                                                      ]
+                                                                       },
+                              "web_research_sources":  [
+
+                                                       ]
+                          }
+              },
+    "health":  {
+                   "status":  "ok"
+               },
+    "database_before":  {
+                            "database":  "sqlite:///./vue.db",
+                            "users":  5,
+                            "sessions":  5,
+                            "sessions_by_mode":  {
+                                                     "job":  1,
+                                                     "random":  1,
+                                                     "resume":  3
+                                                 },
+                            "sessions_by_status":  {
+                                                       "abandoned":  1,
+                                                       "completed":  1,
+                                                       "in_progress":  3
+                                                   }
+                        },
+    "test_account":  {
+                         "created_through_api":  true,
+                         "email":  "vue.phase18.73c6252c55b7@example.com",
+                         "me_status":  200
+                     },
+    "llm_call_logs":  [
+                          {
+                              "task":  "build_question_bank",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "error",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:04:48.170191"
+                          },
+                          {
+                              "task":  "build_question_bank",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "error",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:04:48.170191"
+                          },
+                          {
+                              "task":  "build_question_bank",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  2507.4550001882017,
+                              "created_at":  "2026-10-14T09:04:48.170191"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "success",
+                              "provisional":  false,
+                              "latency_ms":  11615.300600184128,
+                              "created_at":  "2026-10-14T09:04:59.789298"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "success",
+                              "provisional":  false,
+                              "latency_ms":  13215.723800007254,
+                              "created_at":  "2026-10-14T09:05:23.118695"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "success",
+                              "provisional":  false,
+                              "latency_ms":  10086.524599930272,
+                              "created_at":  "2026-10-14T09:05:23.118695"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "error",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:05:31.084220"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "success",
+                              "provisional":  false,
+                              "latency_ms":  4586.257700109854,
+                              "created_at":  "2026-10-14T09:05:31.084220"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:05:31.084220"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1307.5165001209825,
+                              "created_at":  "2026-10-14T09:05:31.084220"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:05:35.826855"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1245.054299943149,
+                              "created_at":  "2026-10-14T09:05:35.826855"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:05:35.826855"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1021.4841000270098,
+                              "created_at":  "2026-10-14T09:05:35.826855"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:05:35.826855"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1288.5726999957114,
+                              "created_at":  "2026-10-14T09:05:35.826855"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:05:39.081736"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1221.8885999172926,
+                              "created_at":  "2026-10-14T09:05:39.081736"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:05:39.081736"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1164.598000003025,
+                              "created_at":  "2026-10-14T09:05:39.081736"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:05:48.133430"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1352.4190001189709,
+                              "created_at":  "2026-10-14T09:05:48.133430"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:05:48.133430"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1188.3381998632103,
+                              "created_at":  "2026-10-14T09:05:48.133430"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "success",
+                              "provisional":  false,
+                              "latency_ms":  5691.610100213438,
+                              "created_at":  "2026-10-14T09:05:48.133430"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "success",
+                              "provisional":  false,
+                              "latency_ms":  7237.665500026196,
+                              "created_at":  "2026-10-14T09:05:57.266532"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:05:57.266532"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1434.7545998170972,
+                              "created_at":  "2026-10-14T09:05:57.266532"
+                          },
+                          {
+                              "task":  "final_evaluation",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:07:05.767656"
+                          },
+                          {
+                              "task":  "final_evaluation",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1996.619899990037,
+                              "created_at":  "2026-10-14T09:07:05.767656"
+                          },
+                          {
+                              "task":  "build_question_bank",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:07:09.820465"
+                          },
+                          {
+                              "task":  "build_question_bank",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  3623.8369999919087,
+                              "created_at":  "2026-10-14T09:07:09.820465"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:07:33.461932"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1085.7768999412656,
+                              "created_at":  "2026-10-14T09:07:33.461932"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:07:37.040976"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1351.3089998159558,
+                              "created_at":  "2026-10-14T09:07:37.040976"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:07:37.040976"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1406.507199862972,
+                              "created_at":  "2026-10-14T09:07:37.040976"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:07:42.338579"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1591.7902002111077,
+                              "created_at":  "2026-10-14T09:07:42.338579"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:07:42.338579"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1343.7270000576973,
+                              "created_at":  "2026-10-14T09:07:42.338579"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:07:42.338579"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1136.5924999117851,
+                              "created_at":  "2026-10-14T09:07:42.338579"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:07:45.988448"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1410.619999980554,
+                              "created_at":  "2026-10-14T09:07:45.988448"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:07:45.988448"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1408.260599942878,
+                              "created_at":  "2026-10-14T09:07:45.988448"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:08:57.037792"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1816.6509000584483,
+                              "created_at":  "2026-10-14T09:08:57.037792"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:08:57.037792"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1643.9381998497993,
+                              "created_at":  "2026-10-14T09:08:57.037792"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:08:57.037792"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1188.9284001663327,
+                              "created_at":  "2026-10-14T09:08:57.037792"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:09:00.811390"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1511.9372000917792,
+                              "created_at":  "2026-10-14T09:09:00.811390"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:09:00.811390"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1410.4959999676794,
+                              "created_at":  "2026-10-14T09:09:00.811390"
+                          },
+                          {
+                              "task":  "final_evaluation",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:09:04.008532"
+                          },
+                          {
+                              "task":  "final_evaluation",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1733.2399000879377,
+                              "created_at":  "2026-10-14T09:09:04.008532"
+                          },
+                          {
+                              "task":  "build_question_bank",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:10:13.192681"
+                          },
+                          {
+                              "task":  "build_question_bank",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  3480.172700015828,
+                              "created_at":  "2026-10-14T09:10:13.192681"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:10:38.344963"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1569.9586998671293,
+                              "created_at":  "2026-10-14T09:10:38.344963"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:10:42.700360"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1689.8119000252336,
+                              "created_at":  "2026-10-14T09:10:42.700360"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:10:42.700360"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1722.192799905315,
+                              "created_at":  "2026-10-14T09:10:42.700360"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:10:47.979835"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1536.0185001045465,
+                              "created_at":  "2026-10-14T09:10:47.979835"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:10:47.979835"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1295.6336000934243,
+                              "created_at":  "2026-10-14T09:10:47.979835"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:10:47.979835"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1169.9761999771,
+                              "created_at":  "2026-10-14T09:10:47.979835"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:10:51.866078"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1478.910599835217,
+                              "created_at":  "2026-10-14T09:10:51.866078"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:10:51.866078"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1490.088599966839,
+                              "created_at":  "2026-10-14T09:10:51.866078"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:12:03.261773"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1695.8071999251842,
+                              "created_at":  "2026-10-14T09:12:03.261773"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:12:03.261773"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  2056.268700165674,
+                              "created_at":  "2026-10-14T09:12:03.261773"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:12:03.261773"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1233.3921999670565,
+                              "created_at":  "2026-10-14T09:12:03.261773"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:12:07.060636"
+                          },
+                          {
+                              "task":  "score_answer",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1493.5790000017732,
+                              "created_at":  "2026-10-14T09:12:07.060636"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:12:07.060636"
+                          },
+                          {
+                              "task":  "next_turn",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  1419.3867000285536,
+                              "created_at":  "2026-10-14T09:12:07.060636"
+                          },
+                          {
+                              "task":  "final_evaluation",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.8-flash",
+                              "status":  "rate_limited",
+                              "provisional":  false,
+                              "latency_ms":  null,
+                              "created_at":  "2026-10-14T09:12:10.848715"
+                          },
+                          {
+                              "task":  "final_evaluation",
+                              "model_requested":  "gemini-3.8-flash",
+                              "model_used":  "gemini-3.5-flash-lite",
+                              "status":  "success",
+                              "provisional":  true,
+                              "latency_ms":  2089.1990999225527,
+                              "created_at":  "2026-10-14T09:12:10.848715"
+                          }
+                      ],
+    "database_after":  {
+                           "database":  "sqlite:///./vue.db",
+                           "users":  6,
+                           "sessions":  8,
+                           "sessions_by_mode":  {
+                                                    "job":  2,
+                                                    "random":  2,
+                                                    "resume":  4
+                                                },
+                           "sessions_by_status":  {
+                                                      "abandoned":  1,
+                                                      "completed":  4,
+                                                      "in_progress":  3
+                                                  }
+                       },
+    "phase8_grounding_diagnostic":  {
+                                        "real_live_call":  true,
+                                        "result":  false,
+                                        "attempted_models":  [
+                                                                 "gemini-3.8-flash",
+                                                                 "gemini-3.5-flash-lite"
+                                                             ],
+                                        "provider_status":  "HTTP 429 from both models",
+                                        "base_plan_unchanged":  true,
+                                        "diagnostic_db_transaction":  "rolled back",
+                                        "web_research_topics":  [
+
+                                                                ]
+                                    },
+    "automated_checks":  {
+                             "backend_pytest":  "141 passed, 2 warnings, 18.24s",
+                             "frontend_vitest":  "46 passed, 7 files",
+                             "frontend_build":  "passed; 844.41 kB interview chunk warning"
+                         },
+    "runtime_hardware":  {
+                             "torch":  "2.14.1+cpu",
+                             "cuda_available":  false,
+                             "voice_stt_device":  "cpu (test-only override)",
+                             "voice_stt_compute_type":  "int8",
+                             "configured_hardware_tier":  "unknown"
+                         },
+    "report_path":  "reports/phase1-8-verification.md"
+}

@@ -5,7 +5,7 @@ import pytest
 from app.core.evaluation import EvaluationError, RUBRIC, score_turn
 from app.db.models import SkillTag, Turn, TurnScore
 from app.llm.router import LLMRouter
-from tests.interview_helpers import session_for
+from tests.interview_helpers import CONFIG, session_for
 
 
 def answered_turn(db):
@@ -38,6 +38,7 @@ async def test_score_fields_schema_rubric_and_temperature(db_session, interview_
     assert call["response_schema"]["properties"]["technical_correctness"]["maximum"] == 5
     assert "ASR transcription artifacts" in call["system_prompt"]
     assert json.loads(call["prompt"])["controlled_skill_tags"] == ["Python"]
+    assert json.loads(call["prompt"])["interview_config"] == CONFIG
     for number in range(1, 6):
         assert RUBRIC.count(f"{number} =") == 4
 

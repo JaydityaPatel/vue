@@ -140,6 +140,7 @@ class LLMCallLog(Base):
     status: Mapped[str] = mapped_column(String)  # success|error|rate_limited
     latency_ms: Mapped[float | None] = mapped_column(Float, nullable=True)
     input_tokens: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    cached_input_tokens: Mapped[int | None] = mapped_column(Integer, nullable=True)
     output_tokens: Mapped[int | None] = mapped_column(Integer, nullable=True)
     error_message: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=_now)

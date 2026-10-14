@@ -137,6 +137,7 @@ class TurnView(BaseModel):
 
 class InterviewView(BaseModel):
     session_id: str
+    mode: Literal["random", "resume", "job"]
     status: str
     config: InterviewConfig
     started_at: datetime
@@ -148,3 +149,4 @@ class InterviewView(BaseModel):
     turns: list[TurnView]
     completion_reason: str | None
     report_generation: ReportReference | None
+    preparation_status: Literal["preparing", "ready", "failed"] = "ready"

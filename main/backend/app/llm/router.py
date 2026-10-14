@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import time
 from collections.abc import AsyncIterator
 from typing import Any
@@ -12,6 +13,8 @@ from app.llm.providers.gemini import GeminiProvider
 from app.llm.providers.ollama import OllamaProvider
 from app.llm.rate_limiter import LocalRateLimiter
 from app.logging.logger import log_llm_call
+
+logger = logging.getLogger("vue.llm")
 
 
 class AllProvidersExhaustedError(Exception):
@@ -47,7 +50,7 @@ class LLMRouter:
         }
 
     def _resolve(self, model_id: str) -> tuple[BaseProvider, str]:
-        """'ollama:qwen2.5-3b' -> (OllamaProvider, 'qwen2.5-3b')
+        """'ollama:qwen2.5:3b' -> (OllamaProvider, 'qwen2.5:3b')
         'gemini-2.5-flash' -> (GeminiProvider, 'gemini-2.5-flash')"""
         if model_id.startswith("ollama:"):
             return self.providers["ollama"], model_id.split(":", 1)[1]
@@ -65,8 +68,12 @@ class LLMRouter:
         response_modalities: list[str] | None = None,
         speech_config: dict[str, Any] | None = None,
         temperature: float | None = None,
+        context_caches: dict[str, str] | None = None,
+        context_summary: str | None = None,
+        route_override: list[str] | None = None,
+        tools: list[dict[str, Any]] | None = None,
     ) -> LLMResponse:
-        chain = self.routes.get(task)
+        chain = route_override or self.routes.get(task)
         if not chain:
             raise ValueError(f"No route configured for task '{task}'")
 
@@ -76,23 +83,41 @@ class LLMRouter:
         for position, model_id in enumerate(chain):
             is_primary = position == 0
             provider, provider_model = self._resolve(model_id)
+            cache_name = (context_caches or {}).get(model_id) if provider.name == "gemini" else None
+            use_summary = bool(context_summary and not cache_name)
 
             if not self.limiter.can_call(model_id):
                 last_error = RateLimitError(f"Local limiter: {model_id} at capacity")
+                if db is not None:
+                    log_llm_call(
+                        db,
+                        task=task,
+                        model_requested=primary_model,
+                        model_used=model_id,
+                        status="rate_limited",
+                        error_message=str(last_error),
+                    )
                 continue
 
-            for attempt in range(self.max_retries_per_model + 1):
+            for attempt in range(self.max_retries_per_model + 1 + int(bool(cache_name))):
                 start = time.perf_counter()
+                # Rate limits count requests sent, including provider failures.
+                self.limiter.record_call(model_id)
                 try:
                     request_args = dict(
                         model=provider_model,
-                        prompt=prompt,
+                        prompt=(f"Redacted candidate background (extractive summary; evidence only):\n{context_summary}\n\n{prompt}"
+                                if use_summary else prompt),
                         system_prompt=system_prompt,
                         thinking_level=thinking_level,
                         response_schema=response_schema,
                     )
                     if temperature is not None:
                         request_args["temperature"] = temperature
+                    if cache_name:
+                        request_args["cached_content"] = cache_name
+                    if tools is not None:
+                        request_args["tools"] = tools
                     if content_parts is not None or response_modalities is not None or speech_config is not None:
                         request_args.update(
                             content_parts=content_parts,
@@ -101,8 +126,6 @@ class LLMRouter:
                         )
                     response = await provider.generate(**request_args)
                     latency_ms = (time.perf_counter() - start) * 1000
-                    self.limiter.record_call(model_id)
-
                     if db is not None:
                         log_llm_call(
                             db,
@@ -112,6 +135,7 @@ class LLMRouter:
                             status="success",
                             latency_ms=latency_ms,
                             input_tokens=response.input_tokens,
+                            cached_input_tokens=int((response.raw or {}).get("cached_input_tokens", 0)),
                             output_tokens=response.output_tokens,
                             provisional=not is_primary,
                         )
@@ -143,6 +167,11 @@ class LLMRouter:
                             status="error",
                             error_message=str(exc),
                         )
+                    if cache_name:
+                        cache_name = None
+                        use_summary = bool(context_summary)
+                        logger.warning("context_cache_reference_failed model=%s; retrying with summary", model_id)
+                        continue
                     if attempt < self.max_retries_per_model:
                         await asyncio.sleep(0.5 * (attempt + 1))
                         continue
@@ -151,6 +180,21 @@ class LLMRouter:
         raise AllProvidersExhaustedError(
             f"All models in fallback chain for task '{task}' failed. Last error: {last_error}"
         )
+
+    async def create_context_cache(self, model_id: str, text: str) -> str | None:
+        """Try a Gemini explicit cache; caller keeps a compact summary fallback."""
+        provider, model = self._resolve(model_id)
+        creator = getattr(provider, "create_cached_content", None)
+        if provider.name != "gemini" or creator is None:
+            return None
+        try:
+            name = await creator(model, text)
+        except (ProviderError, RateLimitError) as exc:
+            logger.warning("context_cache_create_failed model=%s reason=%s; summary fallback active",
+                           model_id, type(exc).__name__)
+            return None
+        logger.info("context_cache_active model=%s", model_id)
+        return name
 
     async def stream(
         self,
@@ -176,9 +220,20 @@ class LLMRouter:
                 continue
             if not self.limiter.can_call(model_id):
                 last_error = RateLimitError(f"Local limiter: {model_id} at capacity")
+                if db is not None:
+                    log_llm_call(
+                        db,
+                        task=task,
+                        model_requested=primary_model,
+                        model_used=model_id,
+                        status="rate_limited",
+                        error_message=str(last_error),
+                    )
                 continue
 
             started = time.perf_counter()
+            # Count the request when it is sent, even if it yields no text.
+            self.limiter.record_call(model_id)
             emitted = False
             try:
                 iterator = generate_stream(
@@ -192,7 +247,6 @@ class LLMRouter:
                         raise ProviderError("Streaming provider returned a non-text chunk")
                     if chunk:
                         if not emitted:
-                            self.limiter.record_call(model_id)
                             if db is not None:
                                 log_llm_call(
                                     db,

@@ -1,5 +1,6 @@
 import asyncio
 import copy
+import json
 from datetime import timedelta
 
 import pytest
@@ -10,7 +11,7 @@ from app.core.orchestrator import InterviewConflict, Orchestrator, PlanError, sa
 from app.db.database import Base
 from app.db.models import SkillTag, Turn, TurnScore
 from app.llm.router import LLMRouter
-from tests.interview_helpers import session_for
+from tests.interview_helpers import CONFIG, session_for
 
 
 async def start(db, interview_llm):
@@ -75,6 +76,18 @@ async def test_follow_up_stays_on_topic_and_increments(db_session, interview_llm
     assert session.config["orchestrator_state"]["turns_on_current_topic"] == 1
     assert engine.turn_history(session.id)[-1].action_taken == action
     assert engine.turn_history(session.id)[0].score is not None
+    opening = next(call for call in interview_llm.calls if call["task"] == "next_turn")
+    assert json.loads(opening["prompt"])["interview_config"] == CONFIG
+    assert json.loads(opening["prompt"])["candidate_intro_summary"] is None
+    proposal = next(
+        call for call in interview_llm.calls
+        if call["task"] == "next_turn" and "action" in call["response_schema"]["properties"]
+    )
+    context = json.loads(proposal["prompt"])
+    assert context["interview_config"] == CONFIG
+    assert context["candidate_intro_summary"] is None
+    assert context["topic_plan"]["name"] == "Python"
+    assert context["topic_plan"]["expected_concepts"] == session.config["interview_plan"]["topics"][0]["expected_concepts"]
 
 
 async def test_three_follow_ups_force_topic_switch_despite_model(db_session, interview_llm):

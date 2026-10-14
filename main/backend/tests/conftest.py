@@ -79,13 +79,15 @@ class FakeProvider:
     def __init__(self, name: str):
         self.name = name
         self.calls: list[str] = []
+        self.last_tools = None
         self._behavior = {}  # model -> "success" | "rate_limit" | "error"
 
     def set_behavior(self, model: str, behavior: str):
         self._behavior[model] = behavior
 
-    async def generate(self, model, prompt, system_prompt=None, thinking_level=None, response_schema=None, temperature=None):
+    async def generate(self, model, prompt, system_prompt=None, thinking_level=None, response_schema=None, temperature=None, tools=None):
         self.calls.append(model)
+        self.last_tools = tools
         behavior = self._behavior.get(model, "success")
         if behavior == "rate_limit":
             raise RateLimitError(f"{model} rate limited")

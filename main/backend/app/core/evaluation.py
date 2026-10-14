@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 
 from app.db.models import InterviewSession, SessionReport, SkillTag, Turn, TurnScore
 from app.llm.router import LLMRouter
-from app.schemas.interviews import ReportOutput, ScoreOutput
+from app.schemas.interviews import InterviewConfig, ReportOutput, ScoreOutput
 
 logger = logging.getLogger("vue.evaluation")
 RUBRIC_VERSION = "v1"
@@ -75,6 +75,9 @@ async def score_turn(
     with db.no_autoflush:
         existing = turn.score
         taxonomy = list(db.scalars(select(SkillTag).order_by(SkillTag.name)))
+        interview_config = {
+            key: turn.session.config.get(key) for key in InterviewConfig.model_fields
+        }
     if existing is not None:
         return existing
     if not turn.answer_text or not turn.answer_text.strip():
@@ -86,11 +89,14 @@ async def score_turn(
             "answer_text": turn.answer_text,
             "expected_concepts": expected_concepts,
             "controlled_skill_tags": [tag.name for tag in taxonomy],
+            "interview_config": interview_config,
         }),
         system_prompt=RUBRIC,
         response_schema=ScoreOutput.model_json_schema(),
         temperature=SCORING_TEMPERATURE,
         db=db,
+        context_caches=turn.session.config.get("context_caches"),
+        context_summary=turn.session.config.get("candidate_context_summary"),
     )
     try:
         output = ScoreOutput.model_validate_json(response.text)

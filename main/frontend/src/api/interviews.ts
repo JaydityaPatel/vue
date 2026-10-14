@@ -17,6 +17,7 @@ export interface TurnResult {
   report_generation?: { method: 'POST'; url: string };
 }
 export interface InterviewCreated extends TurnResult { first_question: string }
+export type InterviewMode = 'random' | 'resume' | 'job';
 export interface TurnScore {
   technical_correctness: number;
   completeness: number;
@@ -43,6 +44,7 @@ export interface InterviewTurn {
 }
 export interface InterviewSession {
   session_id: string;
+  mode: InterviewMode;
   status: 'in_progress' | 'completed' | 'abandoned';
   config: InterviewConfig;
   started_at: string;
@@ -54,6 +56,7 @@ export interface InterviewSession {
   turns: InterviewTurn[];
   completion_reason: string | null;
   report_generation: { method: 'POST'; url: string } | null;
+  preparation_status: 'preparing' | 'ready' | 'failed';
 }
 export interface InterviewReport {
   id: string;
@@ -66,6 +69,12 @@ export interface InterviewReport {
 }
 export async function createInterview(config: InterviewConfig): Promise<InterviewCreated> {
   return (await api.post<InterviewCreated>('/interviews', { mode: 'random', config })).data;
+}
+export async function createDocumentInterview(data: FormData): Promise<InterviewCreated> {
+  return (await api.post<InterviewCreated>('/interviews', data, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 180_000,
+  })).data;
 }
 export async function getInterview(id: string): Promise<InterviewSession> {
   return (await api.get<InterviewSession>(`/interviews/${encodeURIComponent(id)}`)).data;

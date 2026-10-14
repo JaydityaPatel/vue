@@ -95,6 +95,11 @@ temperature 0.1, a structured schema, and local validation. The prompt explicitl
 allows likely ASR mishearings and treats candidate text as evidence rather than
 instructions.
 
+Opening questions, adaptive proposals, and scoring receive the setup's role,
+experience, skills, difficulty, interview style, and duration. Adaptive proposals
+also receive the current topic's seeds and expected concepts. Internal session
+state is kept separate from this setup context.
+
 Expected concepts always come from the stored plan. Unknown returned tags and
 unknown missing concepts are rejected with warning logs; case variants of known
 tags use their canonical name. The evaluator cannot expand the taxonomy.
@@ -120,3 +125,5 @@ Tests mock LLMRouter.run and provider HTTP transports; they never call Gemini.
 They cover plan validation, taxonomy reuse, hard follow-up limits, deadlines,
 malformed proposals, eight-turn interviews, transaction rollback, concurrent
 answers, ownership, persisted reports, and the browser submit/reload flow.
+The browser tests also verify that navigating to a different session while an
+answer request is pending cannot replace its question or release its request lock.

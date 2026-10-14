@@ -40,6 +40,8 @@ class BaseProvider(ABC):
         response_modalities: list[str] | None = None,
         speech_config: dict[str, Any] | None = None,
         temperature: float | None = None,
+        cached_content: str | None = None,
+        tools: list[dict[str, Any]] | None = None,
     ) -> LLMResponse:
         """Run a single generation call. Must raise RateLimitError on 429 and
         ProviderError on any other failure so the router can act on it."""

@@ -58,6 +58,13 @@ async def test_local_rate_limiter_skips_exhausted_model(router, db_session):
     await router.run(task="test_task", prompt="2", db=db_session)
     response = await router.run(task="test_task", prompt="3", db=db_session)
     assert response.model_used == "model-b"
+    from app.db.models import LLMCallLog
+
+    local_limit_logs = db_session.query(LLMCallLog).filter_by(
+        model_used="model-a", status="rate_limited"
+    ).all()
+    assert len(local_limit_logs) == 1
+    assert "Local limiter" in local_limit_logs[0].error_message
 
 
 @pytest.mark.asyncio

@@ -29,9 +29,11 @@ def test_create_and_get_real_persisted_session(client, interview_llm):
     assert body["config"] == CONFIG
     assert body["current_topic"] == "Python"
     assert len(body["turns"]) == 1
+    assert body["turns"][0]["question_text"] == "Explain Python."
     assert body["turns"][0]["id"] == created["turn_id"]
     assert body["topic_coverage"]["Python"] == "in_progress"
     assert 0 < body["time_remaining"] <= 1800
+    assert not any(call["task"] == "job_web_research" for call in interview_llm.calls)
 
 
 @pytest.mark.parametrize("method,suffix", [("get", ""), ("post", "/answer"), ("post", "/report")])

@@ -7,6 +7,7 @@ from app.db.database import init_db
 from app.routers import health
 from app.routers import auth
 from app.routers import interviews
+from app.routers import voice
 
 
 @asynccontextmanager
@@ -28,3 +29,4 @@ app.add_middleware(
 app.include_router(health.router)
 app.include_router(auth.router)
 app.include_router(interviews.router)
+app.include_router(voice.router)

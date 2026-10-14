@@ -46,6 +46,12 @@ class ScriptedInterviewLLM:
         payload = json.loads(kwargs["prompt"])
         if task == "build_question_bank":
             output = self.plan
+        elif task == "job_web_research":
+            output = {"topics": [{
+                "name": "Company API design",
+                "question_seeds": ["How would you version a public API?", "How do you handle breaking changes?"],
+                "expected_concepts": ["compatibility", "versioning"],
+            }]}
         elif task == "score_answer":
             output = self.score_override if self.score_override is not None else {
                 "technical_correctness": 3, "completeness": 3, "communication": 4, "problem_solving": 3,
@@ -64,6 +70,13 @@ class ScriptedInterviewLLM:
                     }
             else:
                 output = {"question_text": payload["topic"]["question_seeds"][0]}
+        elif task == "intro_chat":
+            if "background" in kwargs["response_schema"]["properties"]:
+                output = {"background": "Backend engineer with Python experience.",
+                          "stated_strengths": ["debugging"], "notable_projects": ["API platform"],
+                          "preferred_technologies": ["Python"]}
+            else:
+                output = {"question_text": "What did you own in that project?"}
         elif task == "final_evaluation":
             output = {"summary": "You explained the core approaches clearly.", "improvement_suggestions": ["Discuss tradeoffs and validation."]}
         else:
@@ -71,5 +84,9 @@ class ScriptedInterviewLLM:
         return LLMResponse(
             text=output if isinstance(output, str) else json.dumps(output),
             model_used="mock-fallback" if self.provisional else "mock-primary",
-            raw={"provisional": self.provisional},
+            raw={"provisional": self.provisional, **({
+                "grounding_metadata": {"groundingChunks": [{"web": {
+                    "uri": "https://example.com/interviews", "title": "Interview guide",
+                }}]},
+            } if task == "job_web_research" else {})},
         )

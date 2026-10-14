@@ -1,0 +1,4 @@
+-r requirements.txt
+faster-whisper==1.2.1
+silero-vad==6.2.0
+numpy==2.2.6

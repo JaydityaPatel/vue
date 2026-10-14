@@ -31,6 +31,8 @@ class GeminiProvider(BaseProvider):
         response_modalities: list[str] | None = None,
         speech_config: dict[str, Any] | None = None,
         temperature: float | None = None,
+        cached_content: str | None = None,
+        tools: list[dict[str, Any]] | None = None,
     ) -> LLMResponse:
         if not self.api_key:
             raise ProviderError("GEMINI_API_KEY is not configured")
@@ -40,6 +42,10 @@ class GeminiProvider(BaseProvider):
         parts = [{"text": prompt}, *(content_parts or [])]
         contents = [{"role": "user", "parts": parts}]
         body: dict = {"contents": contents}
+        if cached_content:
+            body["cachedContent"] = cached_content
+        if tools:
+            body["tools"] = tools
 
         if system_prompt:
             body["systemInstruction"] = {"parts": [{"text": system_prompt}]}
@@ -79,8 +85,9 @@ class GeminiProvider(BaseProvider):
 
         data = resp.json()
         try:
-            response_parts = data["candidates"][0]["content"]["parts"]
-        except (KeyError, IndexError) as exc:
+            candidate = data["candidates"][0]
+            response_parts = candidate["content"]["parts"]
+        except (KeyError, IndexError, TypeError) as exc:
             raise ProviderError(f"Unexpected Gemini response shape: {data}") from exc
 
         text = "".join(part.get("text", "") for part in response_parts)
@@ -96,11 +103,34 @@ class GeminiProvider(BaseProvider):
         return LLMResponse(
             text=text,
             model_used=model,
-            input_tokens=usage.get("promptTokenCount", 0),
+            input_tokens=max(0, usage.get("promptTokenCount", 0) - usage.get("cachedContentTokenCount", 0)),
             output_tokens=usage.get("candidatesTokenCount", 0),
-            raw={"latency_ms": latency_ms, "mime_type": (inline_data or {}).get("mimeType") if audio_bytes else None},
+            raw={"latency_ms": latency_ms, "cached_input_tokens": usage.get("cachedContentTokenCount", 0),
+                 "mime_type": (inline_data or {}).get("mimeType") if audio_bytes else None,
+                 "grounding_metadata": candidate.get("groundingMetadata", {})},
             audio_bytes=audio_bytes,
         )
+
+    async def create_cached_content(self, model: str, text: str) -> str | None:
+        """Create a model-bound explicit cache using Gemini's documented v1beta endpoint."""
+        if not self.api_key:
+            raise ProviderError("GEMINI_API_KEY is not configured")
+        url = "https://generativelanguage.googleapis.com/v1beta/cachedContents"
+        body = {"model": f"models/{model}",
+                "contents": [{"role": "user", "parts": [{"text": text}]}], "ttl": "7200s"}
+        try:
+            async with self._client_factory(timeout=self.timeout) as client:
+                response = await client.post(url, headers={"x-goog-api-key": self.api_key}, json=body)
+        except httpx.RequestError as exc:
+            raise ProviderError("Network error creating Gemini context cache") from exc
+        if response.status_code == 429:
+            raise RateLimitError("Gemini context cache creation was rate limited")
+        if response.status_code >= 400:
+            raise ProviderError(f"Gemini context cache unavailable ({response.status_code})")
+        name = response.json().get("name")
+        if not isinstance(name, str) or not name.startswith("cachedContents/"):
+            raise ProviderError("Gemini returned an invalid context cache reference")
+        return name
 
     async def generate_stream(
         self,

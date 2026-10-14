@@ -1,0 +1,22 @@
+Jordan Patel
+Backend Software Engineer | jordan.patel@example.test
+
+SUMMARY
+Backend engineer with 4 years of experience building Python services and event-driven data systems. Focused on reliability, measurable performance, and clear operational ownership.
+
+EXPERIENCE
+Backend Engineer — Meridian Analytics | 2022–Present
+- Designed and owned a Kafka-based real-time event pipeline processing about 10,000 events per second. Added idempotent consumers and bounded retries for duplicate and delayed events; measured p95 processing latency below 200 ms during normal load.
+- Reworked PostgreSQL indexes and query plans for a reporting API, reducing p95 query latency by 42% while preserving correctness for concurrent updates.
+- Added Docker-based local environments and CI checks for a Python/FastAPI service; improved deployment rollback and on-call runbooks.
+- Partnered with product and data teams to investigate production incidents using structured logs, metrics, and trace IDs.
+
+Software Engineer — Cedar Labs | 2020–2022
+- Built Python REST endpoints backed by PostgreSQL and Redis for internal operations tools.
+- Added integration tests and reviewed schema changes with application and analytics teams.
+
+TECHNOLOGIES
+Python, FastAPI, Kafka, PostgreSQL, Redis, Docker, GitHub Actions, Linux, Prometheus, Grafana
+
+EDUCATION
+B.S. Computer Science — State University, 2020
