@@ -6,13 +6,15 @@ import RandomSetupPage from './RandomSetupPage';
 import InterviewRoomPage from './InterviewRoomPage';
 import { IntroRoundPage } from './InterviewRoomPage';
 import UploadSetupPage from './UploadSetupPage';
+import ReportPage from './ReportPage';
 import type { VoiceEvents } from '../voice/connection';
-const voice = vi.hoisted(() => ({ events: null as VoiceEvents | null, instances: [] as VoiceEvents[], start: vi.fn(), dispose: vi.fn(), mute: vi.fn(), end: vi.fn() }));
+const voice = vi.hoisted(() => ({ events: null as VoiceEvents | null, instances: [] as VoiceEvents[], start: vi.fn(), dispose: vi.fn(), mute: vi.fn(), end: vi.fn(), codingSubmitted: vi.fn() }));
 vi.mock('../components/Orb', () => ({ default: ({ orbState, audioLevel }: { orbState: string; audioLevel: number }) => <div data-testid="orb" data-state={orbState} data-audio-level={audioLevel}/> }));
 vi.mock('../voice/connection', () => ({ VoiceConnection: vi.fn().mockImplementation((_id, events) => {
   voice.events = events; voice.instances.push(events);
-  return { start: voice.start, dispose: voice.dispose, mute: voice.mute, end: voice.end };
+  return { start: voice.start, dispose: voice.dispose, mute: voice.mute, end: voice.end, codingSubmitted: voice.codingSubmitted };
 }) }));
+vi.mock('./CodingWorkspacePage', () => ({ CodingWorkspace: ({ onSubmitted }: { onSubmitted: () => void }) => <section aria-label="coding-workspace"><h2>Embedded coding workspace</h2><button onClick={onSubmitted}>Submit coding exercise</button></section> }));
 
 const { createInterview, createDocumentInterview, getInterview, submitAnswer, generateReport } = vi.hoisted(() => ({
   createInterview: vi.fn(), createDocumentInterview: vi.fn(), getInterview: vi.fn(), submitAnswer: vi.fn(), generateReport: vi.fn(),
@@ -183,6 +185,21 @@ describe('Voice interview room', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Start voice' }));
     await waitFor(() => expect(voice.start).toHaveBeenCalledTimes(1));
   });
+
+  it('swaps to coding and back inside the same voice room and keeps its socket connection', async () => {
+    room();
+    await screen.findByText(first.question_text);
+    fireEvent.click(screen.getByRole('button', { name: /start voice/i }));
+    await waitFor(() => expect(voice.start).toHaveBeenCalled());
+    act(() => voice.events?.session({ ...initial, current_topic: 'Coding Exercise', current_topic_type: 'coding', coding_status: 'in_progress' }));
+    act(() => voice.events?.codingReady?.());
+    expect(await screen.findByRole('region', { name: 'coding-workspace' })).toBeInTheDocument();
+    expect(screen.queryByTestId('orb')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Submit coding exercise' }));
+    expect(await screen.findByTestId('orb')).toBeInTheDocument();
+    expect(voice.codingSubmitted).toHaveBeenCalledOnce();
+    expect(voice.instances).toHaveLength(1);
+  });
   it('updates transcript and speaking state from voice events', async () => {
     room();
     await screen.findByText(first.question_text);
@@ -257,5 +274,44 @@ describe('Voice interview room', () => {
     expect(screen.queryByText(second.question_text)).not.toBeInTheDocument();
     expect(screen.getByTestId('orb')).toHaveAttribute('data-state', 'idle');
     view.unmount();
+  });
+});
+
+describe('Coding report', () => {
+  it('renders real dimension scores and turn-by-turn concepts', async () => {
+    generateReport.mockResolvedValueOnce({ id: 'r-real', session_id: 'session-1', summary: 'Reasoning was sound.', overall_score: 4,
+      improvement_suggestions: ['Add retry backoff on API reliability (turn t-1).'], generated_by_model: 'mock', provisional: false,
+      dimension_breakdown: { technical_correctness: 4.2, completeness: 3.8, communication: 4.1, problem_solving: 3.9 },
+      turns: [{ id: 't-1', turn_index: 0, question: 'How do you handle failures?', answer: 'I add retries.', topic: 'API reliability', topic_type: 'discussion',
+        expected_concepts: ['backoff', 'jitter'], missing_concepts: ['jitter'], skill_tags: ['API reliability'],
+        scores: { technical_correctness: 4, completeness: 3, communication: 4, problem_solving: 4 }, feedback: 'Explain backoff.', tests_passed: null, tests_total: null }],
+    });
+    render(<MemoryRouter initialEntries={['/interview/session-1/report']}><Routes>
+      <Route path="/interview/:sessionId/report" element={<ReportPage/>}/><Route path="/interview/:sessionId" element={<div/>}/>
+    </Routes></MemoryRouter>);
+    expect(await screen.findByText('4.20 / 5')).toBeInTheDocument();
+    expect(screen.getByText('How do you handle failures?')).toBeInTheDocument();
+    expect(screen.getByText((_content, element) => element?.tagName === 'P' && element.textContent?.includes('To strengthen:') === true)).toHaveTextContent('jitter');
+  });
+
+  it('shows coding breakdown only when report includes coding turns', async () => {
+    generateReport.mockResolvedValueOnce({ id: 'r1', session_id: 'session-1', summary: 'Good work.', overall_score: 3.7,
+      improvement_suggestions: ['Discuss tradeoffs.'], generated_by_model: 'mock', provisional: false,
+      coding_breakdown: { problems_solved: 1, problems_total: 2, tests_passed: 6, tests_total: 8, complexity_correct: 1, complexity_total: 2 } });
+    const view = render(<MemoryRouter initialEntries={['/interview/session-1/report']}><Routes>
+      <Route path="/interview/:sessionId/report" element={<ReportPage/>}/>
+      <Route path="/interview/:sessionId" element={<div/>}/>
+    </Routes></MemoryRouter>);
+    expect(await screen.findByRole('region', { name: 'Coding round breakdown' })).toHaveTextContent('1/2 problems solved');
+    view.unmount();
+
+    generateReport.mockResolvedValueOnce({ id: 'r2', session_id: 'session-1', summary: 'Nice.', overall_score: 4,
+      improvement_suggestions: ['Keep going.'], generated_by_model: 'mock', provisional: false, coding_breakdown: null });
+    render(<MemoryRouter initialEntries={['/interview/session-1/report']}><Routes>
+      <Route path="/interview/:sessionId/report" element={<ReportPage/>}/>
+      <Route path="/interview/:sessionId" element={<div/>}/>
+    </Routes></MemoryRouter>);
+    await waitFor(() => expect(generateReport).toHaveBeenCalledTimes(2));
+    expect(screen.queryByRole('region', { name: 'Coding round breakdown' })).not.toBeInTheDocument();
   });
 });

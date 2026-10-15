@@ -35,6 +35,7 @@ class ScriptedInterviewLLM:
         self.score_override: dict[str, Any] | str | None = None
         self.provisional = False
         self.fail_task: str | None = None
+        self.coding_evaluation: dict[str, Any] | None = None
 
     async def run(self, **kwargs: Any) -> LLMResponse:
         from app.llm.router import AllProvidersExhaustedError
@@ -79,6 +80,8 @@ class ScriptedInterviewLLM:
                 output = {"question_text": "What did you own in that project?"}
         elif task == "final_evaluation":
             output = {"summary": "You explained the core approaches clearly.", "improvement_suggestions": ["Discuss tradeoffs and validation."]}
+        elif task == "evaluate_coding_solution":
+            output = self.coding_evaluation or {"questions": ["How does your submitted solution handle duplicate values?"], "complexity_correct": True, "edge_cases_identified": ["duplicates"], "feedback": "Discuss your complexity."}
         else:
             raise AssertionError(f"Unexpected LLM task: {task}")
         return LLMResponse(

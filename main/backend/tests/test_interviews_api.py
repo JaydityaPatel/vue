@@ -79,10 +79,15 @@ def test_completion_and_idempotent_report(client, interview_llm):
     assert len(snapshot["turns"]) == 4
     assert all(turn["score"]["rubric_version"] == "v1" for turn in snapshot["turns"])
     assert all(value == "covered" for value in snapshot["topic_coverage"].values())
-    report = client.post(f"{path}/report", headers=headers)
+    assert client.get("/interviews", headers=headers).json()["items"][0]["session_id"] == created["session_id"]
+    report = client.get(f"{path}/report", headers=headers)
     assert report.status_code == 200, report.text
     assert report.json()["overall_score"] == 3.25
     assert report.json()["provisional"] is False
+    assert report.json()["dimension_breakdown"] == {
+        "technical_correctness": 3.0, "completeness": 3.0, "communication": 4.0, "problem_solving": 3.0,
+    }
+    assert len(report.json()["turns"]) == 4
     count = len(interview_llm.calls)
     assert client.post(f"{path}/report", headers=headers).json() == report.json()
     assert len(interview_llm.calls) == count
@@ -142,7 +147,7 @@ def test_plan_failure_does_not_leave_partial_session_or_taxonomy(client, intervi
         get_test_db.close()
 
 
-@pytest.mark.parametrize("patch", [{"duration": 0}, {"duration": 0.5}, {"interview_type": "Coding"}, {"skills": [""]}])
+@pytest.mark.parametrize("patch", [{"duration": 0}, {"duration": 0.5}, {"skills": [""]}])
 def test_invalid_config_rejected_before_llm(client, interview_llm, patch):
     headers = login(client)
     result = client.post("/interviews", headers=headers, json={"mode": "random", "config": {**CONFIG, **patch}})

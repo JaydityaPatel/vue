@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { generateReport, getInterview, type InterviewReport, type InterviewSession } from '../api/interviews';
 import Orb, { type OrbState } from '../components/Orb';
 import TranscriptPanel from '../components/TranscriptPanel';
+import { CodingWorkspace } from './CodingWorkspacePage';
 import { VoiceConnection } from '../voice/connection';
 import { apiErrorMessage } from '../utils/errors';
 import '../interview.css';
@@ -31,6 +32,7 @@ function VoiceRoom({ sessionId, intro }: { sessionId: string; intro: boolean }) 
   const [error, setError] = useState('');
   const [report, setReport] = useState<InterviewReport | null>(null);
   const [reportBusy, setReportBusy] = useState(false);
+  const [codingStage, setCodingStage] = useState(false);
   const connection = useRef<VoiceConnection>();
   const alive = useRef(false);
   const startingRef = useRef(false);
@@ -58,6 +60,7 @@ function VoiceRoom({ sessionId, intro }: { sessionId: string; intro: boolean }) 
       connected: value => { if (alive.current) { startingRef.current = false; setConnected(value); setStarting(false); setEnding(false); } },
       error: message => { if (alive.current) setError(message); },
       introComplete: () => { if (alive.current) navigate(`/interview/${sessionId}`, { replace: true }); },
+      codingReady: () => { if (alive.current) setCodingStage(true); },
     }, intro ? 'intro' : 'interview');
     connection.current = voice;
     await voice.start();
@@ -82,7 +85,10 @@ function VoiceRoom({ sessionId, intro }: { sessionId: string; intro: boolean }) 
     }}>Reload interview</button>}
     {!session && !error && <p role="status">Loading interview...</p>}
     <section className="voice-grid">
-      <div className="voice-stage"><Orb orbState={state} audioLevel={level} sttActive={stt}/>
+      <div className="voice-stage">{codingStage && !ended ? <CodingWorkspace sessionId={sessionId} embedded
+        onSubmitted={() => { connection.current?.codingSubmitted(); setCodingStage(false); }}
+        onEnd={() => { setEnding(true); connection.current?.end(); }}/>
+        : <><Orb orbState={state} audioLevel={level} sttActive={stt}/>
         <p className="voice-state" role="status">{ended ? 'Interview ended' : starting ? 'Connecting…' : state}</p>
         <div className="voice-controls">
           {!connected && !ended && <button className="button button-primary" disabled={starting || !session} onClick={start}>{starting ? 'Connecting…' : 'Start voice'}</button>}
@@ -100,11 +106,12 @@ function VoiceRoom({ sessionId, intro }: { sessionId: string; intro: boolean }) 
         {ended && <div className="voice-summary"><h2>{complete ? 'Interview complete' : 'Interview ended'}</h2>
           {complete && !report && <button className="button button-primary" disabled={reportBusy} onClick={requestReport}>{reportBusy ? 'Preparing report...' : 'Generate report'}</button>}
           {report && <section aria-label="Interview report"><h3>Your report</h3><p>Overall score: {report.overall_score.toFixed(2)} / 5</p><p>{report.summary}</p>
+            {report.coding_breakdown && <div className="coding-report"><h4>Coding round</h4><p>{report.coding_breakdown.problems_solved}/{report.coding_breakdown.problems_total} problems solved · {report.coding_breakdown.tests_passed}/{report.coding_breakdown.tests_total} tests passed</p><p>Correct complexity analysis on {report.coding_breakdown.complexity_correct}/{report.coding_breakdown.complexity_total}</p></div>}
             {report.provisional && <p>This report is provisional because a fallback model contributed.</p>}
             <ul>{report.improvement_suggestions.map(item => <li key={item}>{item}</li>)}</ul></section>}
           <Link to="/interview/new/random">Start another interview</Link>
         </div>}
-      </div>
+      </>}</div>
       <TranscriptPanel turns={session?.turns || []} partial={partial}/>
     </section>
   </main>;

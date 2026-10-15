@@ -7,7 +7,7 @@ export type ServerMessage =
   | { type: 'intro_complete' }
   | { type: 'error'; message: string };
 export type ClientMessage = { type: 'auth'; token: string } | { type: 'playback_done'; turn_id: string }
-  | { type: 'mute'; muted: boolean } | { type: 'end' };
+  | { type: 'mute'; muted: boolean } | { type: 'end' } | { type: 'coding_submitted' };
 
 export function parseMessage(raw: string): ServerMessage {
   const m = JSON.parse(raw);

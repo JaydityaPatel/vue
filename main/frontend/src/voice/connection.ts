@@ -13,6 +13,7 @@ export interface VoiceEvents {
   connected: (connected: boolean) => void;
   error: (message: string) => void;
   introComplete?: () => void;
+  codingReady?: () => void;
 }
 export class VoiceConnection {
   private mic = new Microphone();
@@ -26,6 +27,7 @@ export class VoiceConnection {
   private finished = false;
   private ending = false;
   private turnId = '';
+  private session?: InterviewSession;
   constructor(private id: string, private events: VoiceEvents, private channel: 'interview' | 'intro' = 'interview') {}
   async start() {
     try {
@@ -74,6 +76,7 @@ export class VoiceConnection {
       case 'intro_complete': this.events.introComplete?.(); break;
       case 'snapshot':
         if (message.session.session_id !== this.id) throw new Error('Wrong session');
+        this.session = message.session;
         this.finished = message.session.status !== 'in_progress';
         this.events.session(message.session); this.events.partial('');
         if (this.finished) { this.mic.enable(false); this.playback?.dispose(); this.events.state('idle', false); }
@@ -102,6 +105,9 @@ export class VoiceConnection {
           this.playbackPending = false;
           this.events.state('idle', false);
           this.send({ type: 'playback_done', turn_id: this.turnId });
+          if (this.session?.current_topic_type === 'coding' && this.session.coding_status !== 'submitted') {
+            this.events.codingReady?.();
+          }
         }, error => this.fail(error));
         break;
       case 'question_chunk':
@@ -118,6 +124,7 @@ export class VoiceConnection {
     this.events.partial('');
     this.send({ type: 'mute', muted });
   }
+  codingSubmitted() { this.send({ type: 'coding_submitted' }); }
   end() {
     this.ending = true;
     this.mic.enable(false);

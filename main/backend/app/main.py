@@ -8,6 +8,7 @@ from app.routers import health
 from app.routers import auth
 from app.routers import interviews
 from app.routers import voice
+from app.routers import users
 
 
 @asynccontextmanager
@@ -30,3 +31,4 @@ app.include_router(health.router)
 app.include_router(auth.router)
 app.include_router(interviews.router)
 app.include_router(voice.router)
+app.include_router(users.router)

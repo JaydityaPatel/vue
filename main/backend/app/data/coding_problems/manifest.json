@@ -1,0 +1,6 @@
+{
+  "source": "newfacade/LeetCodeDataset train split supplied by the user from Hugging Face",
+  "license": "Apache-2.0 (as confirmed by the user for the supplied dataset)",
+  "attribution": "Dataset records retain task IDs and source attribution; see https://github.com/newfacade/LeetCodeDataset.",
+  "storage": "catalog.json is the normalized review input; active.json contains only items admitted by scripts/verify_problem_bank.py."
+}

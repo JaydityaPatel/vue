@@ -5,6 +5,7 @@ import json
 import pytest
 
 from app.core.job_web_research import maybe_enrich_job_plan
+from app.db.models import SkillTag
 from app.llm.providers.base import LLMResponse
 from tests.interview_helpers import session_for
 
@@ -66,6 +67,7 @@ class ResearchRouter:
 @pytest.mark.asyncio
 async def test_grounded_findings_merge_as_additional_source_tagged_topics(db_session):
     session = _job_session(db_session)
+    db_session.add(SkillTag(name="Python")); db_session.flush()
     router = ResearchRouter()
 
     changed = await maybe_enrich_job_plan(
@@ -81,6 +83,8 @@ async def test_grounded_findings_merge_as_additional_source_tagged_topics(db_ses
     payload = json.loads(call["prompt"])
     assert payload["role"] == "Backend engineer"
     assert payload["job_description"].startswith("Backend engineer at Example Corp")
+    assert payload["existing_skill_tags"] == ["Python"]
+    assert "authoritative taxonomy" in call["system_prompt"]
     plan = session.config["interview_plan"]
     python = next(topic for topic in plan["topics"] if topic["name"] == "Python")
     assert python["question_seeds"][0] == "Base question one?"
@@ -90,6 +94,7 @@ async def test_grounded_findings_merge_as_additional_source_tagged_topics(db_ses
     assert python["source_tags"] == ["resume_jd", "web_research"]
     research_topic = next(topic for topic in plan["topics"] if topic["name"] == "Company API design")
     assert research_topic["source"] == "web_research"
+    assert research_topic["skill_tag"] == research_topic["name"]
     assert research_topic["question_seed_sources"] == ["web_research", "web_research"]
     assert session.config["orchestrator_state"]["topic_coverage"]["Company API design"] == "not_started"
     assert plan["web_research"]["generated_by_model"] == "gemini-3.8-flash"

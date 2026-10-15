@@ -1,0 +1,23 @@
+{
+  "runtime": "Pyodide 0.27.2",
+  "selected": 150,
+  "passed": 149,
+  "quarantined": 2,
+  "committed_bank_quarantined": 1,
+  "active_bank_quarantined": 0,
+  "self_test_caught_broken_reference": true,
+  "grading_design": "candidate code is invoked by the named entry point and its actual output is compared to expected test output; no candidate/reference source comparison",
+  "alternate_correct_algorithm_passed": true,
+  "quarantine_reasons": [
+    {
+      "id": "sqrtx",
+      "title": "Sqrtx",
+      "reason": "case 26: actual 4294967296, expected 4294967295"
+    },
+    {
+      "id": "__broken-verification-self-test__",
+      "title": "Broken reference self-test",
+      "reason": "self-test: deliberately wrong reference solution was caught"
+    }
+  ]
+}

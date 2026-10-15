@@ -108,6 +108,10 @@ class TurnScore(Base):
     rubric_version: Mapped[str | None] = mapped_column(String, nullable=True)
     scored_by_model: Mapped[str | None] = mapped_column(String, nullable=True)
     provisional: Mapped[bool] = mapped_column(Boolean, default=False)
+    tests_passed: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    tests_total: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    complexity_correct: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
+    edge_cases_identified: Mapped[list | None] = mapped_column(JSON, nullable=True)
 
     turn: Mapped["Turn"] = relationship(back_populates="score")
 
@@ -121,6 +125,8 @@ class SessionReport(Base):
     overall_score: Mapped[float | None] = mapped_column(Float, nullable=True)
     improvement_suggestions: Mapped[list] = mapped_column(JSON, default=list)
     generated_by_model: Mapped[str | None] = mapped_column(String, nullable=True)
+    coding_breakdown: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    dimension_breakdown: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=_now)
 
     session: Mapped["InterviewSession"] = relationship(back_populates="report")

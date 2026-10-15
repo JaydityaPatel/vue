@@ -1,0 +1,27 @@
+{
+  "status": "blocked_before_voice_session",
+  "date": "2026-10-15",
+  "attempts": [
+    {
+      "result": "Gemini route unavailable",
+      "detail": "POST /interviews returned HTTP 503: interview models unavailable; provider reported quota/rate-limit errors."
+    },
+    {
+      "result": "Local Qwen plan generation invalid",
+      "detail": "Ollama qwen2.5:3b returned output that did not validate as PlanOutput. The walkthrough used a persisted three-topic Mixed plan to continue testing the application session path."
+    },
+    {
+      "result": "Voice WebSocket initialization failed",
+      "detail": "After registration/login and persisting the seeded Mixed plan, the live voice WebSocket closed through the generic voice processing/model initialization error handler before emitting a transcript. No actual voice-to-coding-to-voice transcript or live session score was produced."
+    }
+  ],
+  "automated_verification": {
+    "backend": "156 passed",
+    "frontend": "50 passed",
+    "production_build": "passed; Vite warned that the InterviewRoomPage bundle exceeds 500 kB"
+  },
+  "limitations": [
+    "The requested real live end-to-end Mixed voice -> coding -> voice session remains unverified because the configured voice model initialization failed in this environment.",
+    "Frontend same-room workspace transition and report display were covered by UI integration tests, not a browser microphone session."
+  ]
+}

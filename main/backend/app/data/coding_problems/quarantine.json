@@ -1,0 +1,14 @@
+{
+  "problems": [
+    {
+      "id": "sqrtx",
+      "title": "Sqrtx",
+      "reason": "case 26: actual 4294967296, expected 4294967295"
+    },
+    {
+      "id": "__broken-verification-self-test__",
+      "title": "Broken reference self-test",
+      "reason": "self-test: deliberately wrong reference solution was caught"
+    }
+  ]
+}

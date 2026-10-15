@@ -8,10 +8,11 @@ from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
 
 from app.core.orchestrator import InterviewConflict, Orchestrator, PlanError, save_session, time_remaining
+from app.core.interview_planning import _apply_topic_type_policy
 from app.db.database import Base
 from app.db.models import SkillTag, Turn, TurnScore
 from app.llm.router import LLMRouter
-from tests.interview_helpers import CONFIG, session_for
+from tests.interview_helpers import CONFIG, PLAN, session_for
 
 
 async def start(db, interview_llm):
@@ -33,7 +34,8 @@ async def test_plan_structure_reuses_case_insensitive_taxonomy_and_runs_once(db_
     plan = session.config["interview_plan"]
     assert len(plan["topics"]) == 4
     assert plan["topics"][0]["skill_tag_id"] == existing.id
-    assert plan["topics"][0]["name"] == "python"
+    assert plan["topics"][0]["name"] == "Python"
+    assert plan["topics"][0]["skill_tag"] == "python"
     assert all(2 <= len(topic["question_seeds"]) <= 3 and topic["expected_concepts"] for topic in plan["topics"])
     assert set(session.config["orchestrator_state"]["topic_coverage"].values()) == {"not_started"}
     assert len(list(db_session.scalars(select(SkillTag)))) == 4
@@ -41,6 +43,64 @@ async def test_plan_structure_reuses_case_insensitive_taxonomy_and_runs_once(db_
     db_session.commit()
     db_session.expire_all()
     assert session.config["interview_plan"] == plan
+
+
+@pytest.mark.parametrize(("style", "expected"), [
+    ("Technical", "discussion"), ("Behavioral", "discussion"), ("Coding", "coding"),
+])
+def test_topic_type_policy_keeps_style_restrictions(style, expected):
+    from app.schemas.interviews import PlanOutput
+
+    plan = PlanOutput.model_validate(PLAN)
+    result = _apply_topic_type_policy(plan, style, random_mode=True)
+    assert {topic.topic_type for topic in result.topics} == {expected}
+
+
+def test_mixed_plan_interleaves_coding_among_discussion_topics():
+    from app.schemas.interviews import PlanOutput
+
+    plan = PlanOutput.model_validate(PLAN)
+    result = _apply_topic_type_policy(plan, "Mixed", random_mode=True)
+    kinds = [topic.topic_type for topic in result.topics]
+    assert "coding" in kinds and "discussion" in kinds
+    assert all(kind == "discussion" for kind in (kinds[0], kinds[-1]))
+    assert 1 <= kinds.count("coding") <= 2
+
+
+async def test_coding_discussion_reuses_turn_cap_and_returns_to_voice_topic(db_session, interview_llm):
+    session, engine, _ = await start(db_session, interview_llm)
+    await engine.next_turn(session.id, "Initial discussion answer")
+    assert session.config["orchestrator_state"]["current_topic"] == "Coding Exercise"
+    history = engine.turn_history(session.id)
+    topic = next(item for item in session.config["interview_plan"]["topics"] if item["name"] == "Coding Exercise")
+    updated_config = copy.deepcopy(session.config)
+    updated_config["coding_topics"] = {"Coding Exercise": {
+        "problem_id": "two-sum", "status": "submitted", "submitted_code": "class Solution: pass",
+        "passed": 2, "total": 3,
+    }}
+    submission = Turn(session_id=session.id, turn_index=len(history), question_text="Two Sum",
+                      answer_text="class Solution: pass", action_taken="coding_submission")
+    db_session.add(submission); db_session.flush()
+    db_session.add(TurnScore(turn_id=submission.id, technical_correctness=3, completeness=3,
+                             communication=2, problem_solving=3, expected_concepts=[], missing_concepts=[],
+                             skill_tags=[], feedback="Submitted.", rubric_version="coding-v1", scored_by_model="mock"))
+    discussion = Turn(session_id=session.id, turn_index=len(history) + 1,
+                      question_text="Explain the complexity and edge cases.", action_taken="coding_discussion")
+    db_session.add(discussion); db_session.flush()
+    updated_config["turn_context"][submission.id] = {"topic": topic["name"], "topic_type": "coding", "coding_submission": True}
+    updated_config["turn_context"][discussion.id] = {"topic": topic["name"], "topic_type": "coding",
+        "coding_discussion": True, "expected_concepts": topic["expected_concepts"]}
+    session.config = updated_config
+    db_session.flush()
+    interview_llm.actions.extend(["follow_up"] * 4)
+    for count in range(1, 4):
+        await engine.next_turn(session.id, f"Coding explanation {count}")
+        assert session.config["orchestrator_state"]["turns_on_current_topic"] == count
+        assert session.config["orchestrator_state"]["current_topic"] == "Coding Exercise"
+    result = await engine.next_turn(session.id, "Final coding explanation")
+    assert result.next_question.startswith("Good, let's go back to discussing your experience.")
+    assert session.config["orchestrator_state"]["current_topic"] == "System design"
+    assert session.config["orchestrator_state"]["turns_on_current_topic"] == 0
 
 
 @pytest.mark.parametrize("invalid", ["too_few", "duplicate"])
@@ -100,7 +160,9 @@ async def test_three_follow_ups_force_topic_switch_despite_model(db_session, int
     result = await engine.next_turn(session.id, "Answer the third follow-up")
     assert not result.is_complete
     state = session.config["orchestrator_state"]
-    assert state["current_topic"] == "System design"
+    assert state["current_topic"] == "Coding Exercise"
+    assert result.next_question.startswith("Let's switch to a coding exercise")
+    assert session.config["interview_plan"]["topics"][1]["topic_type"] == "coding"
     assert state["turns_on_current_topic"] == 0
     assert state["topic_coverage"]["Python"] == "covered"
     assert len(engine.turn_history(session.id)) == 5
@@ -136,7 +198,11 @@ async def test_timeout_crossed_during_action_call_prevents_next_question(db_sess
 
 
 async def test_all_topics_covered_ends_and_does_not_rescore_on_repeat(db_session, interview_llm):
-    session, engine, _ = await start(db_session, interview_llm)
+    session = session_for(db_session)
+    session.config["interview_type"] = "Technical"
+    engine = Orchestrator(db_session, LLMRouter())
+    await engine.generate_plan(session)
+    await engine.next_turn(session.id, None)
     for _ in range(4):
         result = await engine.next_turn(session.id, "An answer addressing the topic.")
     assert result.is_complete
@@ -148,6 +214,26 @@ async def test_all_topics_covered_ends_and_does_not_rescore_on_repeat(db_session
     assert len(engine.turn_history(session.id)) == 4
 
 
+async def test_coding_discussion_obeys_existing_time_remaining_cutoff(db_session, interview_llm):
+    session, engine, _ = await start(db_session, interview_llm)
+    await engine.next_turn(session.id, "Initial discussion answer")
+    topic_name = session.config["orchestrator_state"]["current_topic"]
+    assert session.config["interview_plan"]["topics"][1]["topic_type"] == "coding"
+    discussion = Turn(session_id=session.id, turn_index=len(engine.turn_history(session.id)),
+                      question_text="Explain complexity and edge cases.", action_taken="coding_discussion")
+    db_session.add(discussion); db_session.flush()
+    updated_config = copy.deepcopy(session.config)
+    updated_config["turn_context"][discussion.id] = {
+        "topic": topic_name, "topic_type": "coding", "expected_concepts": ["complexity", "edge cases"],
+    }
+    session.config = updated_config
+    db_session.flush()
+    engine.clock = lambda: session.started_at + timedelta(minutes=29)
+    result = await engine.next_turn(session.id, "A spoken complexity explanation")
+    assert result.is_complete and result.completion_reason == "time_limit"
+    assert session.config["orchestrator_state"]["topic_coverage"][topic_name] == "covered"
+
+
 @pytest.mark.parametrize("malformed", [
     "this is not JSON", '{"action":"end_session","rationale":"because","question_text":""}',
     '{"action":"follow_up","rationale":"because","question_text":" "}',
@@ -157,7 +243,7 @@ async def test_invalid_action_falls_back_and_logs(db_session, interview_llm, cap
     interview_llm.actions.append(malformed)
     result = await engine.next_turn(session.id, "An answer")
     assert not result.is_complete
-    assert session.config["orchestrator_state"]["current_topic"] == "System design"
+    assert session.config["orchestrator_state"]["current_topic"] == "Coding Exercise"
     assert "llm_action_rejected" in caplog.text
 
 
@@ -260,7 +346,6 @@ async def test_action_outage_uses_deterministic_topic_and_saved_seed(db_session,
     session, engine, _ = await start(db_session, interview_llm)
     interview_llm.fail_task = "next_turn"
     result = await engine.next_turn(session.id, "Candidate answer")
-    assert result.next_question == "Explain System design."
-    assert session.config["orchestrator_state"]["current_topic"] == "System design"
+    assert result.next_question.startswith("Let's switch to a coding exercise")
+    assert session.config["orchestrator_state"]["current_topic"] == "Coding Exercise"
     assert "llm_action_rejected" in caplog.text
-    assert "opening_question_rejected" in caplog.text

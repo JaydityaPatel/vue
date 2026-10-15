@@ -18,7 +18,7 @@ class InterviewConfig(StrictModel):
     experience: Text
     skills: list[Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=100)]] = Field(max_length=30)
     difficulty: Literal["Gentle", "Balanced", "Challenging"]
-    interview_type: Literal["Mixed", "Technical", "Behavioral", "System design"]
+    interview_type: Literal["Mixed", "Technical", "Behavioral", "System design", "Coding"]
     duration: int = Field(strict=True, ge=5, le=120, description="Duration in minutes")
 
     @field_validator("skills")
@@ -40,8 +40,10 @@ class AnswerInput(StrictModel):
 
 class TopicSeed(StrictModel):
     name: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=100)]
+    skill_tag: Text | None = None
     question_seeds: list[Text] = Field(min_length=2, max_length=3)
     expected_concepts: list[Text] = Field(min_length=1, max_length=20)
+    topic_type: Literal["discussion", "coding"] = "discussion"
 
 
 class PlanOutput(StrictModel):
@@ -90,6 +92,10 @@ class ScoreView(ScoreOutput):
     rubric_version: str
     scored_by_model: str
     provisional: bool
+    tests_passed: int | None = None
+    tests_total: int | None = None
+    complexity_correct: bool | None = None
+    edge_cases_identified: list[str] | None = None
 
 
 class ReportOutput(StrictModel):
@@ -103,6 +109,25 @@ class ReportView(ReportOutput):
     overall_score: float
     generated_by_model: str
     provisional: bool
+    coding_breakdown: dict[str, int | float] | None = None
+    dimension_breakdown: dict[str, float] = Field(default_factory=dict)
+    turns: list[dict] = Field(default_factory=list)
+
+
+class InterviewHistoryItem(BaseModel):
+    session_id: str
+    mode: str
+    started_at: datetime
+    completed_at: datetime | None
+    status: str
+    overall_score: float | None
+
+
+class InterviewHistoryPage(BaseModel):
+    items: list[InterviewHistoryItem]
+    page: int
+    page_size: int
+    total: int
 
 
 class ReportReference(BaseModel):
@@ -130,6 +155,7 @@ class TurnView(BaseModel):
     answer_text: str | None
     action_taken: str | None
     topic: str
+    topic_type: Literal["discussion", "coding"] = "discussion"
     generated_by_model: str | None
     provisional: bool
     score: ScoreView | None
@@ -144,6 +170,8 @@ class InterviewView(BaseModel):
     completed_at: datetime | None
     time_remaining: float
     current_topic: str | None
+    current_topic_type: Literal["discussion", "coding"] | None = None
+    coding_status: str | None = None
     turns_on_current_topic: int
     topic_coverage: dict[str, Coverage]
     turns: list[TurnView]

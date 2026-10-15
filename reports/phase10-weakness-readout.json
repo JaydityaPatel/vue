@@ -1,0 +1,46 @@
+{
+  "read_only": true,
+  "source": "configured backend SQLite database (vue.db)",
+  "account": "Phase 1-8 verification account (identifier omitted)",
+  "completed_sessions": 3,
+  "threshold": 2.5,
+  "minimum_distinct_sessions": 2,
+  "items": [
+    {
+      "skill_tag": "PostgreSQL Performance Tuning and Indexing",
+      "occurrence_count": 5,
+      "session_count": 3,
+      "average_scores": {"technical_correctness": 2.4, "completeness": 2.2},
+      "weak_dimensions": ["technical_correctness", "completeness"],
+      "trend": "declining",
+      "trend_delta": -0.75
+    },
+    {
+      "skill_tag": "PostgreSQL Data Modeling and Query Optimization",
+      "occurrence_count": 4,
+      "session_count": 3,
+      "average_scores": {"technical_correctness": 2.5, "completeness": 2.25},
+      "weak_dimensions": ["completeness"],
+      "trend": "improving",
+      "trend_delta": 0.5
+    },
+    {
+      "skill_tag": "Containerization and CI/CD Workflows",
+      "occurrence_count": 3,
+      "session_count": 2,
+      "average_scores": {"technical_correctness": 3.0, "completeness": 2.33},
+      "weak_dimensions": ["completeness"],
+      "trend": "improving",
+      "trend_delta": 1.0
+    },
+    {
+      "skill_tag": "Containerization and Docker Workflow",
+      "occurrence_count": 3,
+      "session_count": 2,
+      "average_scores": {"technical_correctness": 3.0, "completeness": 2.33},
+      "weak_dimensions": ["completeness"],
+      "trend": "improving",
+      "trend_delta": 1.0
+    }
+  ]
+}

@@ -9,7 +9,9 @@ export default function TranscriptPanel({ turns, partial }: { turns: InterviewTu
     <div className="voice-transcript-scroll" role="log" aria-live="polite" aria-relevant="additions text">
       {turns.map(turn => <section key={turn.id} className="voice-turn">
         <div className="voice-message"><h3>Vue</h3><p>{turn.question_text}</p></div>
-        {turn.answer_text !== null && <div className="voice-message candidate-answer"><h3>You</h3><p>{turn.answer_text}</p></div>}
+        {turn.answer_text !== null && <div className="voice-message candidate-answer"><h3>You</h3><p>{turn.action_taken === 'coding_submission'
+          ? `Submitted code · ${turn.score?.tests_passed ?? 0}/${turn.score?.tests_total ?? 0} tests passed`
+          : turn.answer_text}</p></div>}
       </section>)}
       {partial && <div className="voice-message voice-partial"><h3>You <small>Transcribing…</small></h3><p>{partial}</p></div>}
       <div ref={bottom} data-testid="transcript-bottom"/>

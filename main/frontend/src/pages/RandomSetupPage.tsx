@@ -23,7 +23,7 @@ export default function RandomSetupPage() {
         difficulty: difficulty as InterviewConfig['difficulty'],
         interview_type: type as InterviewConfig['interview_type'], duration,
       });
-      navigate(`/interview/${session.session_id}`, { state: { session } });
+        navigate(type === 'Coding' ? `/interview/${session.session_id}/coding` : `/interview/${session.session_id}`, { state: { session } });
     } catch (cause) {
       setError(apiErrorMessage(cause, 'Could not start the interview. Please try again.'));
     } finally {
@@ -35,7 +35,7 @@ export default function RandomSetupPage() {
     <label className="field-label" htmlFor="role">Target role <span className="optional">OPTIONAL</span></label><input className="text-input" id="role" value={role} onChange={event=>setRole(event.target.value)} placeholder="e.g. Product designer"/>
     <label className="field-label" htmlFor="experience">Experience level</label><select className="text-input" id="experience" value={experience} onChange={event=>setExperience(event.target.value)}><option>Entry-level</option><option>Mid-level</option><option>Senior</option><option>Lead / Principal</option></select>
     <label className="field-label" htmlFor="skills">Skills or topics to practice</label><textarea className="text-input" id="skills" value={skills} onChange={event=>setSkills(event.target.value)} placeholder="Type a few, separated by commas" rows={3}/>
-    <div className="form-two-col"><div><label className="field-label" htmlFor="difficulty">Difficulty</label><select className="text-input" id="difficulty" value={difficulty} onChange={event=>setDifficulty(event.target.value)}><option>Gentle</option><option>Balanced</option><option>Challenging</option></select></div><div><label className="field-label" htmlFor="type">Interview style</label><select className="text-input" id="type" value={type} onChange={event=>setType(event.target.value)}><option>Mixed</option><option>Technical</option><option>Behavioral</option><option>System design</option></select></div></div>
+    <div className="form-two-col"><div><label className="field-label" htmlFor="difficulty">Difficulty</label><select className="text-input" id="difficulty" value={difficulty} onChange={event=>setDifficulty(event.target.value)}><option>Gentle</option><option>Balanced</option><option>Challenging</option></select></div><div><label className="field-label" htmlFor="type">Interview style</label><select className="text-input" id="type" value={type} onChange={event=>setType(event.target.value)}><option>Mixed</option><option>Technical</option><option>Coding</option><option>Behavioral</option><option>System design</option></select></div></div>
     <div className="range-heading"><label className="field-label" htmlFor="duration">Practice time</label><span>{duration} min</span></div><input className="range-input" id="duration" type="range" min="10" max="60" step="5" value={duration} onChange={event=>setDuration(Number(event.target.value))}/><div className="range-labels"><span>10 min</span><span>60 min</span></div>
     <div className="setup-note"><Sparkles size={15}/><span>Your practice is ready when you are.</span><Check size={14}/></div>
     {error && <p role="alert" className="interview-error">{error}</p>}

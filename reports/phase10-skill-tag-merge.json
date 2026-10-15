@@ -1,0 +1,69 @@
+{
+  "migration": "main/scripts/merge_duplicate_skill_tags.py",
+  "applied": true,
+  "backup_path": "C:/Users/1001302/AppData/Local/Temp/vue-before-skill-tag-merge-20261015T092435Z.sqlite3",
+  "before_tag_count": 21,
+  "after_tag_count": 19,
+  "turn_score_rows_updated": 9,
+  "session_configs_updated": 3,
+  "canonical_merges": {
+    "PostgreSQL Data Modeling and Query Optimization": "PostgreSQL Performance Tuning and Indexing",
+    "Containerization and Docker Workflow": "Containerization and CI/CD Workflows"
+  },
+  "before_tags": [
+    "ADAS Hardware Evaluation and Camera Architecture",
+    "Backend Engineering",
+    "CAN Architecture Reverse Engineering at Eka Mobility",
+    "Coding Exercise",
+    "Containerization and CI/CD Workflows",
+    "Containerization and Docker Workflow",
+    "Distributed Systems and Message Delivery Semantics",
+    "Financial Domain and Ledger Concepts",
+    "InfraSnap Construction-Stage Analysis Platform",
+    "Internal AI Chatbot Development for EKA Connect",
+    "Kafka Real-Time Event Pipeline at Meridian Analytics",
+    "Observability and Production Incident Investigation",
+    "Observability and Production Incident Response",
+    "PostgreSQL Data Modeling and Query Optimization",
+    "PostgreSQL Performance Tuning and Indexing",
+    "Python Fundamentals and Asynchronous Programming",
+    "RESTful API Architecture and Service Reliability",
+    "RESTful API Development and Caching with Python",
+    "Scratch AI Handwritten Document Digitizer",
+    "Sentifitrade Sentiment-Based Stock Analysis Platform",
+    "System Design"
+  ],
+  "after_tags": [
+    "ADAS Hardware Evaluation and Camera Architecture",
+    "Backend Engineering",
+    "CAN Architecture Reverse Engineering at Eka Mobility",
+    "Coding Exercise",
+    "Containerization and CI/CD Workflows",
+    "Distributed Systems and Message Delivery Semantics",
+    "Financial Domain and Ledger Concepts",
+    "InfraSnap Construction-Stage Analysis Platform",
+    "Internal AI Chatbot Development for EKA Connect",
+    "Kafka Real-Time Event Pipeline at Meridian Analytics",
+    "Observability and Production Incident Investigation",
+    "Observability and Production Incident Response",
+    "PostgreSQL Performance Tuning and Indexing",
+    "Python Fundamentals and Asynchronous Programming",
+    "RESTful API Architecture and Service Reliability",
+    "RESTful API Development and Caching with Python",
+    "Scratch AI Handwritten Document Digitizer",
+    "Sentifitrade Sentiment-Based Stock Analysis Platform",
+    "System Design"
+  ],
+  "verification_account_completed_sessions": 3,
+  "weaknesses_before": [
+    {"skill_tag": "PostgreSQL Performance Tuning and Indexing", "occurrence_count": 5, "session_count": 3, "average_scores": {"technical_correctness": 2.4, "completeness": 2.2}, "weak_dimensions": ["technical_correctness", "completeness"], "trend": "declining", "trend_delta": -0.75},
+    {"skill_tag": "PostgreSQL Data Modeling and Query Optimization", "occurrence_count": 4, "session_count": 3, "average_scores": {"technical_correctness": 2.5, "completeness": 2.25}, "weak_dimensions": ["completeness"], "trend": "improving", "trend_delta": 0.5},
+    {"skill_tag": "Containerization and CI/CD Workflows", "occurrence_count": 3, "session_count": 2, "average_scores": {"technical_correctness": 3.0, "completeness": 2.33}, "weak_dimensions": ["completeness"], "trend": "improving", "trend_delta": 1.0},
+    {"skill_tag": "Containerization and Docker Workflow", "occurrence_count": 3, "session_count": 2, "average_scores": {"technical_correctness": 3.0, "completeness": 2.33}, "weak_dimensions": ["completeness"], "trend": "improving", "trend_delta": 1.0}
+  ],
+  "weaknesses_after": [
+    {"skill_tag": "PostgreSQL Performance Tuning and Indexing", "occurrence_count": 5, "session_count": 3, "average_scores": {"technical_correctness": 2.4, "completeness": 2.2}, "weak_dimensions": ["technical_correctness", "completeness"], "trend": "declining", "trend_delta": -0.75},
+    {"skill_tag": "Containerization and CI/CD Workflows", "occurrence_count": 3, "session_count": 2, "average_scores": {"technical_correctness": 3.0, "completeness": 2.33}, "weak_dimensions": ["completeness"], "trend": "improving", "trend_delta": 1.0}
+  ],
+  "other_taxonomy_note": "The full list also contains Observability and Production Incident Investigation and Observability and Production Incident Response. These were not among the four duplicates requested for this migration and were left unchanged for review."
+}

@@ -5,19 +5,21 @@ import logging
 import jwt
 from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect
 from pydantic import ValidationError
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.core.orchestrator import Orchestrator, utc_now
+from app.core.evaluation import generate_report
 from app.core.document_preparation import wait_for_document_preparation
 from app.core.intro_round import INITIAL_INTRO_QUESTION, INTRO_MIN_FOLLOW_UPS, intro_route, mode_has_intro_round, next_intro_question, summarize_intro
 from app.config import settings
 from app.core.security import decode_access_token
 from app.db.database import get_db
-from app.db.models import User
+from app.db.models import InterviewSession, Turn, User
 from app.llm.router import LLMRouter
 from app.routers.interviews import get_interview, get_llm_router, interview_transaction, owned_session
 from app.voice.endpoint import Endpoint, FRAME_SAMPLES, SAMPLE_RATE
-from app.voice.protocol import Authenticate, End, Error, IntroComplete, Mute, PlaybackDone, Question, Snapshot, State, Transcript, controls
+from app.voice.protocol import Authenticate, CodingSubmitted, End, Error, IntroComplete, Mute, PlaybackDone, Question, Snapshot, State, Transcript, controls
 from app.voice.runtime import VoiceRuntime
 
 router = APIRouter()
@@ -140,6 +142,12 @@ async def _voice_session(ws: WebSocket, session_id: str, *, db: Session,
                     else:
                         with interview_transaction(db):
                             Orchestrator(db, llm).end_interview(session_id)
+                            ended_session = db.get(InterviewSession, session_id)
+                            if ended_session.status == "completed":
+                                report, provisional = await generate_report(ended_session, db=db, router=llm)
+                                ended_session.config = {**ended_session.config, "report_metadata": {
+                                    "model_used": report.generated_by_model, "provisional": provisional,
+                                }}
                     await snapshot()
                     await ws.close(code=1000)
                     return
@@ -152,8 +160,31 @@ async def _voice_session(ws: WebSocket, session_id: str, *, db: Session,
                     if control.turn_id != pending_id or listening:
                         raise HTTPException(409, "Unexpected playback acknowledgement")
                     reset_audio()
-                    listening = True
-                    await send(State(state="idle" if muted else "listening"))
+                    db.expire_all()
+                    current_session = owned_session(session_id, db, user)
+                    topic_name = current_session.config.get("orchestrator_state", {}).get("current_topic")
+                    topic = next((item for item in current_session.config.get("interview_plan", {}).get("topics", [])
+                                  if item["name"] == topic_name), None)
+                    coding = current_session.config.get("coding_topics", {}).get(topic_name, {})
+                    waiting_for_editor = bool(topic and topic.get("topic_type") == "coding" and coding.get("status") != "submitted")
+                    listening = not waiting_for_editor
+                    await send(State(state="idle" if muted or waiting_for_editor else "listening"))
+                elif isinstance(control, CodingSubmitted):
+                    db.expire_all()
+                    current_session = owned_session(session_id, db, user)
+                    topic_name = current_session.config.get("orchestrator_state", {}).get("current_topic")
+                    coding = current_session.config.get("coding_topics", {}).get(topic_name, {})
+                    if coding.get("status") != "submitted":
+                        raise HTTPException(409, "Submit the coding exercise before returning to voice")
+                    pending_turn = next((turn for turn in reversed(db.scalars(
+                        select(Turn).where(Turn.session_id == session_id).order_by(Turn.turn_index)
+                    ).all()) if turn.answer_text is None and not current_session.config.get("turn_context", {}).get(
+                        turn.id, {}).get("transition_only")), None)
+                    if pending_turn is None:
+                        raise HTTPException(409, "The coding discussion question is unavailable")
+                    await snapshot()
+                    reset_audio()
+                    await question(pending_turn.id, pending_turn.question_text)
                 continue
             pcm = message.get("bytes")
             if pcm is None or len(pcm) != FRAME_SAMPLES * 2:
@@ -242,6 +273,12 @@ async def _voice_session(ws: WebSocket, session_id: str, *, db: Session,
                 db.expire_all()
                 with interview_transaction(db):
                     result = await Orchestrator(db, llm).next_turn(session_id, text, turn_id=pending_id)
+                    if result.is_complete:
+                        completed_session = db.get(InterviewSession, session_id)
+                        report, provisional = await generate_report(completed_session, db=db, router=llm)
+                        completed_session.config = {**completed_session.config, "report_metadata": {
+                            "model_used": report.generated_by_model, "provisional": provisional,
+                        }}
                 await snapshot()
                 if result.is_complete:
                     await send(State(state="idle"))

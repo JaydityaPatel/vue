@@ -13,8 +13,9 @@ from sqlalchemy import select, update
 from sqlalchemy.orm import Session, selectinload
 from sqlalchemy.orm.attributes import set_committed_value
 
-from app.core.evaluation import score_turn
+from app.core.evaluation import score_coding_discussion, score_turn
 from app.core.interview_planning import PlanPlanningError, generate_plan_for_session
+from app.core.problem_bank import select_problem
 from app.db.models import InterviewSession, SkillTag, Turn
 from app.llm.router import AllProvidersExhaustedError, LLMRouter
 from app.schemas.interviews import ActionOutput, InterviewConfig, PlanOutput, QuestionOutput, ReportReference, TurnResult
@@ -90,6 +91,8 @@ class Orchestrator:
     async def _opening_question(
         self, topic: dict[str, Any], session: InterviewSession, history: list[Turn]
     ) -> tuple[str, str | None, bool]:
+        if topic.get("topic_type") == "coding":
+            return "Let's switch to a coding exercise. I'll put a problem in front of you now.", None, False
         try:
             response = await self.router.run(
                 task="next_turn",
@@ -109,7 +112,14 @@ class Orchestrator:
                 context_summary=session.config.get("candidate_context_summary"),
             )
             question = QuestionOutput.model_validate_json(response.text)
-            return question.question_text, response.model_used, bool((response.raw or {}).get("provisional", False))
+            text = question.question_text
+            previous = session.config.get("orchestrator_state", {}).get("current_topic")
+            previous_topic = next((item for item in session.config.get("interview_plan", {}).get("topics", [])
+                                   if item["name"] == previous), None)
+            previous_coding = previous_topic and previous_topic.get("topic_type") == "coding"
+            if previous_coding:
+                text = "Good, let's go back to discussing your experience. " + text
+            return text, response.model_used, bool((response.raw or {}).get("provisional", False))
         except (ValidationError, AllProvidersExhaustedError):
             logger.warning("opening_question_rejected session_id=%s; using planned seed", session.id)
             plan = session.config["interview_plan"]
@@ -184,7 +194,10 @@ class Orchestrator:
                 raise InterviewConflict("This question was already answered; reload the interview")
             pending.answer_text = user_answer.strip()
             context = config["turn_context"][pending.id]
-            await score_turn(pending, context["expected_concepts"], db=self.db, router=self.router)
+            scored = await score_turn(pending, context["expected_concepts"], db=self.db, router=self.router)
+            await score_coding_discussion(pending, scored, db=self.db, router=self.router)
+            if "coding_topics" in session.config:
+                config["coding_topics"] = copy.deepcopy(session.config["coding_topics"])
 
             # Score the last answer before any completion path. A pending question
             # can still be answered after the deadline; no new one is then issued.
@@ -230,6 +243,14 @@ class Orchestrator:
         state["current_topic"] = topic["name"]
         state["topic_coverage"][topic["name"]] = "in_progress"
         state["turns_on_current_topic"] = 0
+        if topic.get("topic_type") == "coding":
+            try:
+                problem = select_problem(session.config["difficulty"], topics=session.config.get("skills", []))
+            except LookupError as exc:
+                raise PlanError(str(exc)) from exc
+            config.setdefault("coding_topics", {})[topic["name"]] = {
+                "problem_id": problem["id"], "status": "in_progress",
+            }
         turn = self._new_turn(session, config, history, topic, question, action if history else None, model, provisional)
         save_session(self.db, session, original, config)
         return self._result(session, turn)
@@ -257,6 +278,8 @@ class Orchestrator:
         )
         config["turn_context"][turn.id] = {
             "topic": topic["name"], "skill_tag_id": topic["skill_tag_id"],
+            "topic_type": topic.get("topic_type", "discussion"),
+            "transition_only": topic.get("topic_type") == "coding" and question.startswith("Let's switch to a coding exercise"),
             "expected_concepts": topic["expected_concepts"],
             "generated_by_model": model, "provisional": provisional,
         }

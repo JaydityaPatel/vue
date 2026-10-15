@@ -29,7 +29,11 @@ class End(StrictMessage):
     type: Literal["end"]
 
 
-controls = TypeAdapter(Annotated[PlaybackDone | Mute | End, Field(discriminator="type")])
+class CodingSubmitted(StrictMessage):
+    type: Literal["coding_submitted"]
+
+
+controls = TypeAdapter(Annotated[PlaybackDone | Mute | End | CodingSubmitted, Field(discriminator="type")])
 
 
 class Snapshot(StrictMessage):

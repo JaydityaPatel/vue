@@ -34,3 +34,19 @@ def init_db():
     }:
         with engine.begin() as connection:
             connection.execute(text("ALTER TABLE llm_call_logs ADD COLUMN cached_input_tokens INTEGER"))
+    migrations = {
+        "turn_scores": {
+            "tests_passed": "INTEGER", "tests_total": "INTEGER",
+            "complexity_correct": "BOOLEAN", "edge_cases_identified": "JSON",
+        },
+        "session_reports": {"coding_breakdown": "JSON", "dimension_breakdown": "JSON"},
+    }
+    tables = set(inspector.get_table_names())
+    for table, columns in migrations.items():
+        if table not in tables:
+            continue
+        existing = {column["name"] for column in inspector.get_columns(table)}
+        for name, kind in columns.items():
+            if name not in existing:
+                with engine.begin() as connection:
+                    connection.execute(text(f"ALTER TABLE {table} ADD COLUMN {name} {kind}"))
